@@ -10,7 +10,7 @@ var ahead = 0;
 var towin = 74;
 
 var redcount = 15;
-var colors_finish = 27;
+const COLOR_FINISH = 27;
 
 var p1redused = 0;
 var p1blackused = 0;
@@ -28,20 +28,40 @@ var p2brownused = 0;
 var p2greenused = 0;
 var p2yellowused = 0;
 
-function Hello() {
-    alert("Hello, World");
- }
+const RED = 1;
+const BLACK = 7;
+const PINK = 6;
+const BLUE = 5;
+const BROWN = 4;
+const GREEN = 3;
+const YELLOW = 2;
 
-function Red(p1) {
-    if (p1 === "p1red"){
-        console.log("p1");
+
+function Red(player) {
+    console.log(player);
+    if (player === "p1"){
+        //console.log("p1");
+        p2break = 0;
+        p1break = p1break + RED;
+        p1point = p1point + RED;
+        p1redused++;
+        redcount--;
+        document.getElementById("p1points").innerHTML = p1point; //dát to do jiné funkce?
+        document.getElementById("p1break").innerHTML = p1break; // taky?
+    } else {
+        p1break = 0;
+        p2point = p2point + RED;
+        p2break = p2break + RED;
+        p2redused++;
+        redcount--;
+        document.getElementById("p2points").innerHTML = p1point; //taky
+        document.getElementById("p2break").innerHTML = p1break; //taky
     }
-    p2break = 0;
-    p1point = p1point+1;
-    p1break = p1break+1;
-    p1redused = p1redused+1;
-    document.getElementById("p1points").innerHTML = p1point;
-    document.getElementById("p1break").innerHTML = p1break;
+
+}
+
+function RefreshUI() {
+    //tady se bude refresovat cely UI
 }
 
 function RedCount() {
