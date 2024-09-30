@@ -71,6 +71,32 @@ function Black(player) {
     RefreshUI();
 }
 
+function Pink(player) {
+    if (player === "p1"){
+        p1break = p1break + PINK;
+        p1point = p1point + PINK;
+        p1pinkused++;
+    } else {
+        p2break = p2break + PINK;
+        p2point = p2point + PINK;
+        p2pinkused++;
+    }
+    RefreshUI();
+}
+
+function Blue(player) {
+    if (player === "p1"){
+        p1break = p1break + BLUE;
+        p1point = p1point + BLUE;
+        p1blueused++;
+    } else {
+        p2break = p2break + BLUE;
+        p2point = p2point + BLUE;
+        p2blueused++;
+    }
+    RefreshUI();
+}
+
 function RefreshUI() {
     document.getElementById("p1points").innerHTML = p1point;
     document.getElementById("p1break").innerHTML = p1break; 
