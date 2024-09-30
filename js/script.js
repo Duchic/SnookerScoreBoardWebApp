@@ -46,31 +46,38 @@ function Red(player) {
         p1point = p1point + RED;
         p1redused++;
         redcount--;
-        document.getElementById("p1points").innerHTML = p1point; //dát to do jiné funkce?
-        document.getElementById("p1break").innerHTML = p1break; // taky?
     } else {
+        console.log("jsem v p2");
         p1break = 0;
         p2point = p2point + RED;
         p2break = p2break + RED;
         p2redused++;
         redcount--;
-        document.getElementById("p2points").innerHTML = p1point; //taky
-        document.getElementById("p2break").innerHTML = p1break; //taky
-    }
 
+    }
+    RefreshUI();
+}
+
+function Black(player) {
+    if (player === "p1"){
+        p1break = p1break + BLACK;
+        p1point = p1point + BLACK;
+        p1blackused++;
+    } else {
+        p2break = p2break + BLACK;
+        p2point = p2point + BLACK;
+        p2blackused++;
+    }
+    RefreshUI();
 }
 
 function RefreshUI() {
-    //tady se bude refresovat cely UI
+    document.getElementById("p1points").innerHTML = p1point;
+    document.getElementById("p1break").innerHTML = p1break; 
+    document.getElementById("p2points").innerHTML = p2point; 
+    document.getElementById("p2break").innerHTML = p2break; 
 }
 
-function RedCount() {
-    redcount--;
-    document.getElementById("p1red").value = "redCount";
-    if(redcount == 0){
-        document.getElementById("p1red").disabled = true;
-    }
-}
 
 function AheadCount(p1point, p2point) {
     if(p1point - p2point > 0){
