@@ -97,6 +97,45 @@ function Blue(player) {
     RefreshUI();
 }
 
+function Brown(player) {
+    if (player === "p1"){
+        p1break = p1break + BROWN;
+        p1point = p1point + BROWN;
+        p1blueused++;
+    } else {
+        p2break = p2break + BROWN;
+        p2point = p2point + BROWN;
+        p2blueused++;
+    }
+    RefreshUI();
+}
+
+function Green(player) {
+    if (player === "p1"){
+        p1break = p1break + GREEN;
+        p1point = p1point + GREEN;
+        p1blueused++;
+    } else {
+        p2break = p2break + GREEN;
+        p2point = p2point + GREEN;
+        p2blueused++;
+    }
+    RefreshUI();
+}
+
+function Yellow(player) {
+    if (player === "p1"){
+        p1break = p1break + YELLOW;
+        p1point = p1point + YELLOW;
+        p1blueused++;
+    } else {
+        p2break = p2break + YELLOW;
+        p2point = p2point + YELLOW;
+        p2blueused++;
+    }
+    RefreshUI();
+}
+
 function RefreshUI() {
     document.getElementById("p1points").innerHTML = p1point;
     document.getElementById("p1break").innerHTML = p1break; 
