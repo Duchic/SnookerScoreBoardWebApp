@@ -141,6 +141,7 @@ function RefreshUI() {
     document.getElementById("p1break").innerHTML = p1break; 
     document.getElementById("p2points").innerHTML = p2point; 
     document.getElementById("p2break").innerHTML = p2break; 
+    document.getElementById("ahead").innerText = AheadCount(p1point, p2point);
 }
 
 
@@ -150,4 +151,8 @@ function AheadCount(p1point, p2point) {
     }else {
         return p2point - p1point;
     }
+}
+
+function Remaining(){
+    
 }
