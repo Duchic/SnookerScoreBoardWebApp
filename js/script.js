@@ -137,11 +137,11 @@ function Yellow(player) {
 }
 
 function RefreshUI() {
-    document.getElementById("p1points").innerHTML = p1point;
-    document.getElementById("p1break").innerHTML = p1break; 
-    document.getElementById("p2points").innerHTML = p2point; 
-    document.getElementById("p2break").innerHTML = p2break; 
-    document.getElementById("ahead").innerText = AheadCount(p1point, p2point);
+    document.getElementById("p1points").innerHTML = 'Points: ' + p1point;
+    document.getElementById("p1break").innerHTML = 'Break: ' + p1break; 
+    document.getElementById("p2points").innerHTML = 'Points: ' + p2point; 
+    document.getElementById("p2break").innerHTML = 'Break: ' + p2break; 
+    document.getElementById("ahead").innerText = 'Ahead: ' + AheadCount(p1point, p2point);
 }
 
 
@@ -154,5 +154,29 @@ function AheadCount(p1point, p2point) {
 }
 
 function Remaining(){
+    
+}
+
+function Max(){
+
+}
+
+function ToWin(){
+
+}
+
+function Foul7(){
+
+}
+
+function Foul6(){
+
+}
+
+function Foul5(){
+
+}
+
+function Foul4(){
     
 }
