@@ -465,3 +465,34 @@ p {
   border-radius: 20px;
   text-decoration: none;
 }
+
+.BUTTON_FOUL {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  height: 40px;
+  line-height: 20px;
+  color: #FFFFFF;
+  font-family: Arial;
+  width: 100%;
+  font-size: 30px;
+  font-weight: 100;
+  padding: 2px;
+  background-color: #7c7979;
+  -webkit-box-shadow: 1px 1px 20px 0 #7c7979;
+  -moz-box-shadow: 1px 1px 20px 0 #7c7979;
+  box-shadow: 1px 1px 20px 0 #7c7979;
+  text-shadow: 1px 1px 20px #7c7979;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.BUTTON_FOUL:hover {
+  background: #7c7979;
+  border: solid #7c7979 1px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-decoration: none;
+}
