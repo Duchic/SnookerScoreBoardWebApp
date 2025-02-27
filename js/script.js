@@ -46,14 +46,15 @@ function Red(player) {
         p1point = p1point + RED;
         p1redused++;
         redcount--;
+        Remaining();
     } else {
-        console.log("jsem v p2");
+        //console.log("jsem v p2");
         p1break = 0;
         p2point = p2point + RED;
         p2break = p2break + RED;
         p2redused++;
         redcount--;
-
+        Remaining();
     }
     RefreshUI();
 }
@@ -142,6 +143,7 @@ function RefreshUI() {
     document.getElementById("p2points").innerHTML = 'Points: ' + p2point; 
     document.getElementById("p2break").innerHTML = 'Break: ' + p2break; 
     document.getElementById("ahead").innerText = 'Ahead: ' + AheadCount(p1point, p2point);
+    document.getElementById("remaining").innerText = 'Remaining: ' + remaining;
 }
 
 
@@ -154,7 +156,7 @@ function AheadCount(p1point, p2point) {
 }
 
 function Remaining(){
-    
+    remaining = ((redcount * BLACK) + COLOR_FINISH);
 }
 
 function Max(){
