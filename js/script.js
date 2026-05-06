@@ -61,10 +61,12 @@ function Red(player) {
 
 function Black(player) {
     if (player === "p1"){
+        p2break = 0;
         p1break = p1break + BLACK;
         p1point = p1point + BLACK;
         p1blackused++;
     } else {
+        p1break = 0;
         p2break = p2break + BLACK;
         p2point = p2point + BLACK;
         p2blackused++;
@@ -74,10 +76,12 @@ function Black(player) {
 
 function Pink(player) {
     if (player === "p1"){
+        p2break = 0;
         p1break = p1break + PINK;
         p1point = p1point + PINK;
         p1pinkused++;
     } else {
+        p1break = 0;
         p2break = p2break + PINK;
         p2point = p2point + PINK;
         p2pinkused++;
@@ -87,10 +91,12 @@ function Pink(player) {
 
 function Blue(player) {
     if (player === "p1"){
+        p2break = 0;
         p1break = p1break + BLUE;
         p1point = p1point + BLUE;
         p1blueused++;
     } else {
+        p1break = 0;
         p2break = p2break + BLUE;
         p2point = p2point + BLUE;
         p2blueused++;
@@ -100,39 +106,54 @@ function Blue(player) {
 
 function Brown(player) {
     if (player === "p1"){
+        p2break = 0;
         p1break = p1break + BROWN;
         p1point = p1point + BROWN;
-        p1blueused++;
+        p1brownused++;
     } else {
+        p1break = 0;
         p2break = p2break + BROWN;
         p2point = p2point + BROWN;
-        p2blueused++;
+        p2brownused++;
     }
     RefreshUI();
 }
 
 function Green(player) {
     if (player === "p1"){
+        p2break = 0;
         p1break = p1break + GREEN;
         p1point = p1point + GREEN;
-        p1blueused++;
+        p1greenused++;
     } else {
+        p1break = 0;
         p2break = p2break + GREEN;
         p2point = p2point + GREEN;
-        p2blueused++;
+        p2greenused++;
     }
     RefreshUI();
 }
 
 function Yellow(player) {
     if (player === "p1"){
+        p2break = 0;
         p1break = p1break + YELLOW;
         p1point = p1point + YELLOW;
-        p1blueused++;
+        p1yellowused++;
     } else {
+        p1break = 0;
         p2break = p2break + YELLOW;
         p2point = p2point + YELLOW;
-        p2blueused++;
+        p2yellowused++;
+    }
+    RefreshUI();
+}
+
+function Miss(player) {
+    if (player === "p1"){
+        p1break = 0;
+    } else {
+        p2break = 0;
     }
     RefreshUI();
 }

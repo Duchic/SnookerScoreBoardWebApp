@@ -257,10 +257,11 @@ p {
   line-height: 20px;
   color: #FFFFFF;
   font-family: Arial;
-  width: 100%; /*200px*/
+  width: 100%;
   font-size: 30px;
   font-weight: 100;
   padding: 2px;
+  margin-bottom: 8px;
   background-color: #F50000;
   -webkit-box-shadow: 1px 1px 20px 0 #000000;
   -moz-box-shadow: 1px 1px 20px 0 #000000;
@@ -366,7 +367,7 @@ p {
 
 .BUTTON_BROWN:hover {
   background: #994C00;
-  border: solid#994C00 1px;
+  border: solid #994C00 1px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -397,7 +398,7 @@ p {
 
 .BUTTON_BLUE:hover {
   background: #0000FF;
-  border: solid#0000FF 1px;
+  border: solid #0000FF 1px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -491,6 +492,32 @@ p {
 .BUTTON_FOUL:hover {
   background: #7c7979;
   border: solid #7c7979 1px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+.BUTTON_MISS {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  background: #e05c00;
+  border: solid #e05c00 1px;
+  color: #ffffff;
+  font-family: Lato, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  text-shadow: 1px 1px 20px #e05c00;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.BUTTON_MISS:hover {
+  background: #b84d00;
+  border: solid #b84d00 1px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
