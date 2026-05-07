@@ -3,30 +3,8 @@ var p1break = 0;
 var p2point = 0;
 var p2break = 0;
 
-
-var maxpoints = 147;
-var remaining = 147;
-var ahead = 0;
-var towin = 74;
-
 var redcount = 15;
 const COLOR_FINISH = 27;
-
-var p1redused = 0;
-var p1blackused = 0;
-var p1pinkused = 0;
-var p1blueused = 0;
-var p1brownused = 0;
-var p1greenused = 0;
-var p1yellowused = 0;
-
-var p2redused = 0;
-var p2blackused = 0;
-var p2pinkused = 0;
-var p2blueused = 0;
-var p2brownused = 0;
-var p2greenused = 0;
-var p2yellowused = 0;
 
 const RED = 1;
 const BLACK = 7;
@@ -38,23 +16,16 @@ const YELLOW = 2;
 
 
 function Red(player) {
-    console.log(player);
     if (player === "p1"){
-        //console.log("p1");
         p2break = 0;
-        p1break = p1break + RED;
-        p1point = p1point + RED;
-        p1redused++;
+        p1break += RED;
+        p1point += RED;
         redcount--;
-        Remaining();
     } else {
-        //console.log("jsem v p2");
         p1break = 0;
-        p2point = p2point + RED;
-        p2break = p2break + RED;
-        p2redused++;
+        p2point += RED;
+        p2break += RED;
         redcount--;
-        Remaining();
     }
     RefreshUI();
 }
@@ -62,14 +33,12 @@ function Red(player) {
 function Black(player) {
     if (player === "p1"){
         p2break = 0;
-        p1break = p1break + BLACK;
-        p1point = p1point + BLACK;
-        p1blackused++;
+        p1break += BLACK;
+        p1point += BLACK;
     } else {
         p1break = 0;
-        p2break = p2break + BLACK;
-        p2point = p2point + BLACK;
-        p2blackused++;
+        p2break += BLACK;
+        p2point += BLACK;
     }
     RefreshUI();
 }
@@ -77,14 +46,12 @@ function Black(player) {
 function Pink(player) {
     if (player === "p1"){
         p2break = 0;
-        p1break = p1break + PINK;
-        p1point = p1point + PINK;
-        p1pinkused++;
+        p1break += PINK;
+        p1point += PINK;
     } else {
         p1break = 0;
-        p2break = p2break + PINK;
-        p2point = p2point + PINK;
-        p2pinkused++;
+        p2break += PINK;
+        p2point += PINK;
     }
     RefreshUI();
 }
@@ -92,14 +59,12 @@ function Pink(player) {
 function Blue(player) {
     if (player === "p1"){
         p2break = 0;
-        p1break = p1break + BLUE;
-        p1point = p1point + BLUE;
-        p1blueused++;
+        p1break += BLUE;
+        p1point += BLUE;
     } else {
         p1break = 0;
-        p2break = p2break + BLUE;
-        p2point = p2point + BLUE;
-        p2blueused++;
+        p2break += BLUE;
+        p2point += BLUE;
     }
     RefreshUI();
 }
@@ -107,14 +72,12 @@ function Blue(player) {
 function Brown(player) {
     if (player === "p1"){
         p2break = 0;
-        p1break = p1break + BROWN;
-        p1point = p1point + BROWN;
-        p1brownused++;
+        p1break += BROWN;
+        p1point += BROWN;
     } else {
         p1break = 0;
-        p2break = p2break + BROWN;
-        p2point = p2point + BROWN;
-        p2brownused++;
+        p2break += BROWN;
+        p2point += BROWN;
     }
     RefreshUI();
 }
@@ -122,14 +85,12 @@ function Brown(player) {
 function Green(player) {
     if (player === "p1"){
         p2break = 0;
-        p1break = p1break + GREEN;
-        p1point = p1point + GREEN;
-        p1greenused++;
+        p1break += GREEN;
+        p1point += GREEN;
     } else {
         p1break = 0;
-        p2break = p2break + GREEN;
-        p2point = p2point + GREEN;
-        p2greenused++;
+        p2break += GREEN;
+        p2point += GREEN;
     }
     RefreshUI();
 }
@@ -137,14 +98,12 @@ function Green(player) {
 function Yellow(player) {
     if (player === "p1"){
         p2break = 0;
-        p1break = p1break + YELLOW;
-        p1point = p1point + YELLOW;
-        p1yellowused++;
+        p1break += YELLOW;
+        p1point += YELLOW;
     } else {
         p1break = 0;
-        p2break = p2break + YELLOW;
-        p2point = p2point + YELLOW;
-        p2yellowused++;
+        p2break += YELLOW;
+        p2point += YELLOW;
     }
     RefreshUI();
 }
@@ -158,48 +117,88 @@ function Miss(player) {
     RefreshUI();
 }
 
-function RefreshUI() {
-    document.getElementById("p1points").innerHTML = 'Points: ' + p1point;
-    document.getElementById("p1break").innerHTML = 'Break: ' + p1break; 
-    document.getElementById("p2points").innerHTML = 'Points: ' + p2point; 
-    document.getElementById("p2break").innerHTML = 'Break: ' + p2break; 
-    document.getElementById("ahead").innerText = 'Ahead: ' + AheadCount(p1point, p2point);
-    document.getElementById("remaining").innerText = 'Remaining: ' + remaining;
+function Foul7(player) {
+    if (player === "p1"){
+        p1break = 0;
+        p2point += BLACK;
+    } else {
+        p2break = 0;
+        p1point += BLACK;
+    }
+    RefreshUI();
 }
 
+function Foul6(player) {
+    if (player === "p1"){
+        p1break = 0;
+        p2point += PINK;
+    } else {
+        p2break = 0;
+        p1point += PINK;
+    }
+    RefreshUI();
+}
+
+function Foul5(player) {
+    if (player === "p1"){
+        p1break = 0;
+        p2point += BLUE;
+    } else {
+        p2break = 0;
+        p1point += BLUE;
+    }
+    RefreshUI();
+}
+
+function Foul4(player) {
+    if (player === "p1"){
+        p1break = 0;
+        p2point += BROWN;
+    } else {
+        p2break = 0;
+        p1point += BROWN;
+    }
+    RefreshUI();
+}
+
+function Reset() {
+    p1point = 0;
+    p1break = 0;
+    p2point = 0;
+    p2break = 0;
+    redcount = 15;
+    RefreshUI();
+}
+
+function RefreshUI() {
+    var remaining = Remaining();
+    document.getElementById("p1points").innerHTML = 'Points: ' + p1point;
+    document.getElementById("p1break").innerHTML = 'Break: ' + p1break;
+    document.getElementById("p2points").innerHTML = 'Points: ' + p2point;
+    document.getElementById("p2break").innerHTML = 'Break: ' + p2break;
+    document.getElementById("ahead").innerText = AheadCount(p1point, p2point);
+    document.getElementById("remaining").innerText = remaining;
+    document.getElementById("maxPoints").innerText = Max(remaining);
+    document.getElementById("toWin").innerText = ToWin();
+}
 
 function AheadCount(p1point, p2point) {
-    if(p1point - p2point > 0){
-        return p1point - p2point;
-    }else {
-        return p2point - p1point;
-    }
+    return Math.abs(p1point - p2point);
 }
 
-function Remaining(){
-    remaining = ((redcount * BLACK) + COLOR_FINISH);
+function Remaining() {
+    // each red can be followed by a black (max); plus final colored balls
+    return (redcount * (RED + BLACK)) + COLOR_FINISH;
 }
 
-function Max(){
-
+function Max(remaining) {
+    // max achievable score for the trailing player
+    return Math.min(p1point, p2point) + remaining;
 }
 
-function ToWin(){
-
+function ToWin() {
+    // points the trailing player needs to overtake the leader
+    return AheadCount(p1point, p2point) + 1;
 }
 
-function Foul7(){
-
-}
-
-function Foul6(){
-
-}
-
-function Foul5(){
-
-}
-
-function Foul4(){
-    
-}
+RefreshUI();
