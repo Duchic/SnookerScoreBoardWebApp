@@ -531,6 +531,165 @@ p {
   text-decoration: none;
 }
 
+.active-player-name {
+  color: #e8a000;
+  text-shadow: 0 0 10px rgba(232, 160, 0, 0.5);
+  border-bottom: 3px solid #e8a000;
+  padding-bottom: 2px;
+}
+
+.inactive-player-name {
+  color: #999999;
+  text-shadow: none;
+  border-bottom: none;
+}
+
+.progress-section {
+  display: flex;
+  align-items: center;
+  margin: 14px 0;
+  gap: 12px;
+}
+
+.progress-bar-label {
+  width: 24px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.progress-bar-container {
+  position: relative;
+  flex: 1;
+  height: 38px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #d8d8d8;
+  border-radius: 19px;
+  overflow: hidden;
+  display: flex;
+}
+
+.progress-current,
+.progress-potential {
+  height: 100%;
+  transition: width 0.35s ease;
+}
+
+.p1-current   { background: #1155cc; }
+.p1-potential { background: #99bbf0; }
+.p2-current   { background: #cc2200; }
+.p2-potential { background: #f0a090; }
+
+.progress-win-marker {
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  width: 4px;
+  background: #ff8800;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: left 0.35s ease;
+  z-index: 5;
+}
+
+.marker-label {
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: #ff8800;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.bar-value-label {
+  position: absolute;
+  top: calc(100% + 4px);
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: left 0.35s ease;
+}
+
+.progress-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.solid-p1     { background: #1155cc; }
+.potential-p1 { background: #99bbf0; }
+.solid-p2     { background: #cc2200; }
+.potential-p2 { background: #f0a090; }
+
+.legend-marker-icon {
+  display: inline-block;
+  width: 4px;
+  height: 14px;
+  background: #ff8800;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.BUTTON_SWITCH {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  height: 44px;
+  line-height: 24px;
+  color: #FFFFFF;
+  font-family: Arial;
+  width: 100%;
+  font-size: 24px;
+  font-weight: 100;
+  padding: 2px;
+  margin-bottom: 8px;
+  background-color: #2a6080;
+  -webkit-box-shadow: 1px 1px 20px 0 #000000;
+  -moz-box-shadow: 1px 1px 20px 0 #000000;
+  box-shadow: 1px 1px 20px 0 #000000;
+  text-shadow: 1px 1px 10px #000000;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.BUTTON_SWITCH:hover {
+  background: #1e4d66;
+  border: solid #1e4d66 1px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
 .BUTTON_RESET {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;

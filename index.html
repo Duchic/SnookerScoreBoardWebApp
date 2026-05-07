@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
           <div class="col-3">
-            <h3 class="center">Player 1</h3>
+            <h3 class="center" id="p1-name">Player 1</h3>
             <input type="button" class="BUTTON_RED" onclick="Red('p1');" name="p1red" id="p1red" value="Red" />
             <input type="button" class="BUTTON_BLACK" onclick="Black('p1');" name="p1black" id="p1black" value="Black" />
             <input type="button" class="BUTTON_PINK" onclick="Pink('p1');" name="p1pink" id="p1pink" value="Pink" />
@@ -37,7 +37,7 @@
             <div><input type="button" class="BUTTON_MISS" onclick="Miss('p2');" name="p2miss" id="p2miss" value="Miss" /></div>
           </div>
           <div class="col-3">
-            <h3 class="center">Player 2</h3>
+            <h3 class="center" id="p2-name">Player 2</h3>
             <input type="button" class="BUTTON_RED" onclick="Red('p2');" name="p2red" id="p2red" value="Red" />
             <input type="button" class="BUTTON_BLACK" onclick="Black('p2');" name="p2black" id="p2black" value="Black" />
             <input type="button" class="BUTTON_PINK" onclick="Pink('p2');" name="p2pink" id="p2pink" value="Pink" />
@@ -45,6 +45,11 @@
             <input type="button" class="BUTTON_BROWN" onclick="Brown('p2');" name="p2brown" id="p2brown" value="Brown" />
             <input type="button" class="BUTTON_GREEN" onclick="Green('p2');" name="p2green" id="p2green" value="Green" />
             <input type="button" class="BUTTON_YELLOW" onclick="Yellow('p2');" name="p2yellow" id="p2yellow" value="Yellow" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <input type="button" class="BUTTON_SWITCH" onclick="TogglePlayer();" value="Přepnout hráče" />
           </div>
         </div>
         <div class="row">
@@ -63,6 +68,29 @@
           <div class="col-3">
             <h5 class="center" id="toWin_lbl">To win</h5>
             <h5 class="center" id="toWin">0</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="progress-section">
+              <div class="progress-bar-label" id="bar-player-label">P1</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar">
+                  <div class="progress-current" id="bar-current"></div>
+                  <div class="progress-potential" id="bar-potential"></div>
+                </div>
+                <div class="progress-win-marker" id="bar-win-marker">
+                  <div class="marker-label" id="bar-marker-label"></div>
+                </div>
+                <div class="bar-value-label" id="bar-score-label"></div>
+                <div class="bar-value-label" id="bar-max-label"></div>
+              </div>
+            </div>
+            <div class="progress-legend">
+              <span class="legend-item"><span class="legend-dot" id="legend-current-dot"></span> Skóre hráče</span>
+              <span class="legend-item"><span class="legend-dot" id="legend-potential-dot"></span> Max dosažitelné</span>
+              <span class="legend-item"><span class="legend-marker-icon"></span> Soupeř potřebuje snooker</span>
+            </div>
           </div>
         </div>
         <div class="row">
