@@ -9,6 +9,9 @@ var colorsRemaining = COLOR_FINISH;
 
 var currentPlayer = "p1";
 
+var p1frames = 0;
+var p2frames = 0;
+
 var history = [];
 
 const RED = 1;
@@ -181,6 +184,12 @@ function TogglePlayer() {
     RefreshUI();
 }
 
+function WinFrame(player) {
+    if (player === "p1") p1frames++;
+    else                 p2frames++;
+    Reset();
+}
+
 function Reset() {
     history = [];
     p1point = 0;
@@ -191,6 +200,12 @@ function Reset() {
     colorsRemaining = COLOR_FINISH;
     currentPlayer = "p1";
     RefreshUI();
+}
+
+function ResetMatch() {
+    p1frames = 0;
+    p2frames = 0;
+    Reset();
 }
 
 function RefreshUI() {
@@ -219,6 +234,8 @@ function RefreshUI() {
     toWinEl.style.color  = toWin === 0                        ? "#1a8a1a" : "";
     maxEl.style.color    = myScore + remaining < oppScore     ? "#cc2200" : "";
 
+    document.getElementById("p1-frames").innerText = p1frames;
+    document.getElementById("p2-frames").innerText = p2frames;
     document.getElementById("btn-undo").disabled = history.length === 0;
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
