@@ -195,14 +195,26 @@ function Reset() {
 
 function RefreshUI() {
     var remaining = Remaining();
+    var isP1      = currentPlayer === "p1";
+    var myScore   = isP1 ? p1point : p2point;
+    var oppScore  = isP1 ? p2point : p1point;
+    var diff      = myScore - oppScore;
+
     document.getElementById("p1points").innerHTML = 'Points: ' + p1point;
-    document.getElementById("p1break").innerHTML = 'Break: ' + p1break;
+    document.getElementById("p1break").innerHTML  = 'Break: '  + p1break;
     document.getElementById("p2points").innerHTML = 'Points: ' + p2point;
-    document.getElementById("p2break").innerHTML = 'Break: ' + p2break;
-    document.getElementById("ahead").innerText = AheadCount(p1point, p2point);
-    document.getElementById("remaining").innerText = remaining;
-    document.getElementById("maxPoints").innerText = Max(remaining);
-    document.getElementById("toWin").innerText = ToWin();
+    document.getElementById("p2break").innerHTML  = 'Break: '  + p2break;
+
+    var aheadLbl = diff > 0 ? "Vedete o" : diff < 0 ? "Zaostáváte o" : "Remíza";
+    document.getElementById("ahead_lbl").innerText  = aheadLbl;
+    document.getElementById("ahead").innerText      = Math.abs(diff);
+
+    document.getElementById("remaining").innerText  = remaining;
+    document.getElementById("maxPoints").innerText  = myScore + remaining;
+
+    var toWin = Math.max(0, oppScore + remaining - myScore + 1);
+    document.getElementById("toWin").innerText      = toWin > 0 ? toWin : "✓";
+
     document.getElementById("btn-undo").disabled = history.length === 0;
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
@@ -270,12 +282,5 @@ function Remaining() {
     return (redcount * (RED + BLACK)) + colorsRemaining;
 }
 
-function Max(remaining) {
-    return Math.min(p1point, p2point) + remaining;
-}
-
-function ToWin() {
-    return AheadCount(p1point, p2point) + 1;
-}
 
 RefreshUI();
