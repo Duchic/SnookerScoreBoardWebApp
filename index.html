@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row">
           <div class="col-3">
-            <h3 class="center" id="p1-name">Player 1</h3>
+            <input type="text" class="player-name-input" id="p1-name" value="Player 1" />
             <input type="button" class="BUTTON_RED" onclick="Red('p1');" name="p1red" id="p1red" value="Red" />
             <input type="button" class="BUTTON_BLACK" onclick="Black('p1');" name="p1black" id="p1black" value="Black" />
             <input type="button" class="BUTTON_PINK" onclick="Pink('p1');" name="p1pink" id="p1pink" value="Pink" />
@@ -35,7 +35,7 @@
             <div><input type="button" class="BUTTON_FOUL" onclick="Foul4('p2');" name="p2foul4" id="p2foul4" value="Foul4" /></div>
           </div>
           <div class="col-3">
-            <h3 class="center" id="p2-name">Player 2</h3>
+            <input type="text" class="player-name-input" id="p2-name" value="Player 2" />
             <input type="button" class="BUTTON_RED" onclick="Red('p2');" name="p2red" id="p2red" value="Red" />
             <input type="button" class="BUTTON_BLACK" onclick="Black('p2');" name="p2black" id="p2black" value="Black" />
             <input type="button" class="BUTTON_PINK" onclick="Pink('p2');" name="p2pink" id="p2pink" value="Pink" />
@@ -46,8 +46,11 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-6">
             <input type="button" class="BUTTON_SWITCH" onclick="TogglePlayer();" value="Přepnout hráče" />
+          </div>
+          <div class="col-6">
+            <input type="button" class="BUTTON_UNDO" onclick="Undo();" id="btn-undo" value="↩ Zpět" disabled />
           </div>
         </div>
         <div class="row">

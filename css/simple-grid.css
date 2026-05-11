@@ -531,6 +531,35 @@ p {
   text-decoration: none;
 }
 
+input[type="button"]:disabled {
+  opacity: 0.35;
+  cursor: default !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.player-name-input {
+  display: block;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  text-align: center;
+  font-size: 1.375rem;
+  font-family: 'Lato', Helvetica, sans-serif;
+  color: #333447;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 2px 2px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.player-name-input:focus {
+  outline: none;
+  cursor: text;
+}
+
 .active-player-name {
   color: #e8a000;
   text-shadow: 0 0 10px rgba(232, 160, 0, 0.5);
@@ -688,6 +717,44 @@ p {
   -moz-border-radius: 20px;
   border-radius: 20px;
   text-decoration: none;
+}
+
+.BUTTON_UNDO {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  height: 44px;
+  line-height: 24px;
+  color: #FFFFFF;
+  font-family: Arial;
+  width: 100%;
+  font-size: 24px;
+  font-weight: 100;
+  padding: 2px;
+  margin-bottom: 8px;
+  background-color: #8b5500;
+  -webkit-box-shadow: 1px 1px 20px 0 #000000;
+  -moz-box-shadow: 1px 1px 20px 0 #000000;
+  box-shadow: 1px 1px 20px 0 #000000;
+  text-shadow: 1px 1px 10px #000000;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.BUTTON_UNDO:hover:not(:disabled) {
+  background: #6b4000;
+  border: solid #6b4000 1px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+
+.BUTTON_UNDO:disabled {
+  background-color: #c8b89a;
+  box-shadow: none;
+  cursor: default;
+  opacity: 0.6;
 }
 
 .BUTTON_RESET {

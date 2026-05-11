@@ -9,6 +9,8 @@ var colorsRemaining = COLOR_FINISH;
 
 var currentPlayer = "p1";
 
+var history = [];
+
 const RED = 1;
 const BLACK = 7;
 const PINK = 6;
@@ -18,7 +20,33 @@ const GREEN = 3;
 const YELLOW = 2;
 
 
+function saveState() {
+    history.push({
+        p1point:         p1point,
+        p1break:         p1break,
+        p2point:         p2point,
+        p2break:         p2break,
+        redcount:        redcount,
+        colorsRemaining: colorsRemaining,
+        currentPlayer:   currentPlayer
+    });
+}
+
+function Undo() {
+    if (history.length === 0) return;
+    var state = history.pop();
+    p1point         = state.p1point;
+    p1break         = state.p1break;
+    p2point         = state.p2point;
+    p2break         = state.p2break;
+    redcount        = state.redcount;
+    colorsRemaining = state.colorsRemaining;
+    currentPlayer   = state.currentPlayer;
+    RefreshUI();
+}
+
 function Red(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += RED;
@@ -34,6 +62,7 @@ function Red(player) {
 }
 
 function Black(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += BLACK;
@@ -48,6 +77,7 @@ function Black(player) {
 }
 
 function Pink(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += PINK;
@@ -62,6 +92,7 @@ function Pink(player) {
 }
 
 function Blue(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += BLUE;
@@ -76,6 +107,7 @@ function Blue(player) {
 }
 
 function Brown(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += BROWN;
@@ -90,6 +122,7 @@ function Brown(player) {
 }
 
 function Green(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += GREEN;
@@ -104,6 +137,7 @@ function Green(player) {
 }
 
 function Yellow(player) {
+    saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += YELLOW;
@@ -117,8 +151,8 @@ function Yellow(player) {
     RefreshUI();
 }
 
-
 function applyFoul(player, points) {
+    saveState();
     if (player === "p1") {
         p1break = 0;
         p2point += points;
@@ -136,6 +170,7 @@ function Foul5(player) { applyFoul(player, BLUE);  }
 function Foul4(player) { applyFoul(player, BROWN); }
 
 function TogglePlayer() {
+    saveState();
     if (currentPlayer === "p1") {
         p1break = 0;
         currentPlayer = "p2";
@@ -147,6 +182,7 @@ function TogglePlayer() {
 }
 
 function Reset() {
+    history = [];
     p1point = 0;
     p1break = 0;
     p2point = 0;
@@ -167,20 +203,21 @@ function RefreshUI() {
     document.getElementById("remaining").innerText = remaining;
     document.getElementById("maxPoints").innerText = Max(remaining);
     document.getElementById("toWin").innerText = ToWin();
+    document.getElementById("btn-undo").disabled = history.length === 0;
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
 }
 
 function UpdateActivePlayer() {
-    var p1Name = document.getElementById("p1-name");
-    var p2Name = document.getElementById("p2-name");
-    if (currentPlayer === "p1") {
-        p1Name.className = "center active-player-name";
-        p2Name.className = "center inactive-player-name";
-    } else {
-        p1Name.className = "center inactive-player-name";
-        p2Name.className = "center active-player-name";
-    }
+    var isP1 = currentPlayer === "p1";
+
+    document.getElementById("p1-name").className = "player-name-input " + (isP1 ? "active-player-name" : "inactive-player-name");
+    document.getElementById("p2-name").className = "player-name-input " + (isP1 ? "inactive-player-name" : "active-player-name");
+
+    var p1Balls = ["p1red","p1black","p1pink","p1blue","p1brown","p1green","p1yellow"];
+    var p2Balls = ["p2red","p2black","p2pink","p2blue","p2brown","p2green","p2yellow"];
+    p1Balls.forEach(function(id) { document.getElementById(id).disabled = !isP1; });
+    p2Balls.forEach(function(id) { document.getElementById(id).disabled =  isP1; });
 }
 
 function UpdateProgressBars(remaining) {
@@ -203,27 +240,22 @@ function UpdateProgressBars(remaining) {
     document.getElementById("bar-current").style.width   = currentPct + "%";
     document.getElementById("bar-potential").style.width = potentialPct + "%";
 
-    // score label — below bar, at end of solid portion
     var scoreLabelEl = document.getElementById("bar-score-label");
     scoreLabelEl.style.left  = currentPct + "%";
     scoreLabelEl.style.color = currentColor;
     scoreLabelEl.innerText   = myScore > 0 ? myScore : "";
 
-    // max label — below bar, at end of potential portion
-    var maxVal    = myScore + remaining;
-    var maxPct    = clampPct(maxVal / scale * 100);
+    var maxVal     = myScore + remaining;
+    var maxPct     = clampPct(maxVal / scale * 100);
     var maxLabelEl = document.getElementById("bar-max-label");
     maxLabelEl.style.left  = maxPct + "%";
     maxLabelEl.style.color = currentColor;
     maxLabelEl.innerText   = maxVal;
 
-    // marker = opponent's MAX (current + remaining):
-    //   solid bar past marker  → opponent needs snooker to win
-    //   full bar before marker → you cannot win even in best case
     var markerVal = oppScore + remaining;
     var markerPct = clampPct(markerVal / scale * 100);
-    document.getElementById("bar-win-marker").style.left    = markerPct + "%";
-    document.getElementById("bar-marker-label").innerText   = markerVal;
+    document.getElementById("bar-win-marker").style.left  = markerPct + "%";
+    document.getElementById("bar-marker-label").innerText = markerVal;
 }
 
 function clampPct(pct) {
@@ -239,12 +271,10 @@ function Remaining() {
 }
 
 function Max(remaining) {
-    // max achievable score for the trailing player
     return Math.min(p1point, p2point) + remaining;
 }
 
 function ToWin() {
-    // points the trailing player needs to overtake the leader
     return AheadCount(p1point, p2point) + 1;
 }
 
