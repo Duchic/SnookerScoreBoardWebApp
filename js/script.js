@@ -110,14 +110,6 @@ function Yellow(player) {
     RefreshUI();
 }
 
-function Miss(player) {
-    if (player === "p1"){
-        p1break = 0;
-    } else {
-        p2break = 0;
-    }
-    RefreshUI();
-}
 
 function Foul7(player) {
     if (player === "p1"){
