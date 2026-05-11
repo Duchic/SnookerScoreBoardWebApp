@@ -213,7 +213,11 @@ function RefreshUI() {
     document.getElementById("maxPoints").innerText  = myScore + remaining;
 
     var toWin = Math.max(0, oppScore + remaining - myScore + 1);
-    document.getElementById("toWin").innerText      = toWin > 0 ? toWin : "✓";
+    var toWinEl   = document.getElementById("toWin");
+    var maxEl     = document.getElementById("maxPoints");
+    toWinEl.innerText  = toWin > 0 ? toWin : "✓";
+    toWinEl.style.color  = toWin === 0                        ? "#1a8a1a" : "";
+    maxEl.style.color    = myScore + remaining < oppScore     ? "#cc2200" : "";
 
     document.getElementById("btn-undo").disabled = history.length === 0;
     UpdateActivePlayer();
