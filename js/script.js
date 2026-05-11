@@ -251,6 +251,15 @@ function UpdateActivePlayer() {
     var p2Balls = ["p2red","p2black","p2pink","p2blue","p2brown","p2green","p2yellow"];
     p1Balls.forEach(function(id) { document.getElementById(id).disabled = !isP1; });
     p2Balls.forEach(function(id) { document.getElementById(id).disabled =  isP1; });
+
+    if (redcount === 0) {
+        var colorSequence = {27: "yellow", 25: "green", 22: "brown", 18: "blue", 13: "pink", 7: "black"};
+        var nextColor = colorSequence[colorsRemaining];
+        var prefix = isP1 ? "p1" : "p2";
+        ["red","black","pink","blue","brown","green","yellow"].forEach(function(color) {
+            document.getElementById(prefix + color).disabled = (color !== nextColor);
+        });
+    }
 }
 
 function UpdateProgressBars(remaining) {
