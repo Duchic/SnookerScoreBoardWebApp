@@ -5,6 +5,7 @@ var p2break = 0;
 
 var redcount = 15;
 const COLOR_FINISH = 27;
+var colorsRemaining = COLOR_FINISH;
 
 var currentPlayer = "p1";
 
@@ -42,6 +43,7 @@ function Black(player) {
         p2break += BLACK;
         p2point += BLACK;
     }
+    if (redcount === 0) colorsRemaining -= BLACK;
     RefreshUI();
 }
 
@@ -55,6 +57,7 @@ function Pink(player) {
         p2break += PINK;
         p2point += PINK;
     }
+    if (redcount === 0) colorsRemaining -= PINK;
     RefreshUI();
 }
 
@@ -68,6 +71,7 @@ function Blue(player) {
         p2break += BLUE;
         p2point += BLUE;
     }
+    if (redcount === 0) colorsRemaining -= BLUE;
     RefreshUI();
 }
 
@@ -81,6 +85,7 @@ function Brown(player) {
         p2break += BROWN;
         p2point += BROWN;
     }
+    if (redcount === 0) colorsRemaining -= BROWN;
     RefreshUI();
 }
 
@@ -94,6 +99,7 @@ function Green(player) {
         p2break += GREEN;
         p2point += GREEN;
     }
+    if (redcount === 0) colorsRemaining -= GREEN;
     RefreshUI();
 }
 
@@ -107,53 +113,27 @@ function Yellow(player) {
         p2break += YELLOW;
         p2point += YELLOW;
     }
+    if (redcount === 0) colorsRemaining -= YELLOW;
     RefreshUI();
 }
 
 
-function Foul7(player) {
-    if (player === "p1"){
+function applyFoul(player, points) {
+    if (player === "p1") {
         p1break = 0;
-        p2point += BLACK;
+        p2point += points;
     } else {
         p2break = 0;
-        p1point += BLACK;
+        p1point += points;
     }
+    currentPlayer = player === "p1" ? "p2" : "p1";
     RefreshUI();
 }
 
-function Foul6(player) {
-    if (player === "p1"){
-        p1break = 0;
-        p2point += PINK;
-    } else {
-        p2break = 0;
-        p1point += PINK;
-    }
-    RefreshUI();
-}
-
-function Foul5(player) {
-    if (player === "p1"){
-        p1break = 0;
-        p2point += BLUE;
-    } else {
-        p2break = 0;
-        p1point += BLUE;
-    }
-    RefreshUI();
-}
-
-function Foul4(player) {
-    if (player === "p1"){
-        p1break = 0;
-        p2point += BROWN;
-    } else {
-        p2break = 0;
-        p1point += BROWN;
-    }
-    RefreshUI();
-}
+function Foul7(player) { applyFoul(player, BLACK); }
+function Foul6(player) { applyFoul(player, PINK);  }
+function Foul5(player) { applyFoul(player, BLUE);  }
+function Foul4(player) { applyFoul(player, BROWN); }
 
 function TogglePlayer() {
     if (currentPlayer === "p1") {
@@ -172,6 +152,7 @@ function Reset() {
     p2point = 0;
     p2break = 0;
     redcount = 15;
+    colorsRemaining = COLOR_FINISH;
     currentPlayer = "p1";
     RefreshUI();
 }
@@ -254,8 +235,7 @@ function AheadCount(p1point, p2point) {
 }
 
 function Remaining() {
-    // each red can be followed by a black (max); plus final colored balls
-    return (redcount * (RED + BLACK)) + COLOR_FINISH;
+    return (redcount * (RED + BLACK)) + colorsRemaining;
 }
 
 function Max(remaining) {
