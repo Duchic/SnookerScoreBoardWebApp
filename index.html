@@ -29,7 +29,7 @@
               <input type="button" class="BUTTON_FOUL" onclick="Foul5('p1');" name="p1foul5" id="p1foul5" value="Foul5" />
               <input type="button" class="BUTTON_FOUL" onclick="Foul4('p1');" name="p1foul4" id="p1foul4" value="Foul4" />
             </div>
-            <input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p1');" value="Výhra framu" />
+            <input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p1');" value="Win Frame" />
           </div>
           <div class="col-6">
             <div class="frame-score-container">
@@ -52,32 +52,32 @@
               <input type="button" class="BUTTON_FOUL" onclick="Foul5('p2');" name="p2foul5" id="p2foul5" value="Foul5" />
               <input type="button" class="BUTTON_FOUL" onclick="Foul4('p2');" name="p2foul4" id="p2foul4" value="Foul4" />
             </div>
-            <input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p2');" value="Výhra framu" />
+            <input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p2');" value="Win Frame" />
           </div>
         </div>
         <div class="row controls-row">
           <div class="col-6">
-            <input type="button" class="BUTTON_SWITCH" onclick="TogglePlayer();" value="Přepnout hráče" />
+            <input type="button" class="BUTTON_SWITCH" onclick="TogglePlayer();" value="Switch Player" />
           </div>
           <div class="col-6">
-            <input type="button" class="BUTTON_UNDO" onclick="Undo();" id="btn-undo" value="↩ Zpět" disabled />
+            <input type="button" class="BUTTON_UNDO" onclick="Undo();" id="btn-undo" value="↩ Undo" disabled />
           </div>
         </div>
         <div class="row stats-row">
           <div class="col-3">
-            <h5 class="center" id="ahead_lbl">Remíza</h5>
+            <h5 class="center" id="ahead_lbl">Tied</h5>
             <h5 class="center" id="ahead">0</h5>
           </div>
           <div class="col-3">
-            <h5 class="center" id="remaining_lbl">Zbývá</h5>
+            <h5 class="center" id="remaining_lbl">Remaining</h5>
             <h5 class="center" id="remaining">0</h5>
           </div>
           <div class="col-3">
-            <h5 class="center" id="maxPoints_lbl">Tvoje max</h5>
+            <h5 class="center" id="maxPoints_lbl">Your max</h5>
             <h5 class="center" id="maxPoints">0</h5>
           </div>
           <div class="col-3">
-            <h5 class="center" id="toWin_lbl">Potřebuješ</h5>
+            <h5 class="center" id="toWin_lbl">You need</h5>
             <h5 class="center" id="toWin">0</h5>
           </div>
         </div>
@@ -98,18 +98,18 @@
               </div>
             </div>
             <div class="progress-legend">
-              <span class="legend-item"><span class="legend-dot" id="legend-current-dot"></span> Skóre hráče</span>
-              <span class="legend-item"><span class="legend-dot" id="legend-potential-dot"></span> Max dosažitelné</span>
-              <span class="legend-item"><span class="legend-marker-icon"></span> Soupeř potřebuje snooker</span>
+              <span class="legend-item"><span class="legend-dot" id="legend-current-dot"></span> Player score</span>
+              <span class="legend-item"><span class="legend-dot" id="legend-potential-dot"></span> Max reachable</span>
+              <span class="legend-item"><span class="legend-marker-icon"></span> Opponent needs snooker</span>
             </div>
           </div>
         </div>
         <div class="row bottom-row">
           <div class="col-6">
-            <input type="button" class="BUTTON_RESET" onclick="Reset();" value="Další frame" />
+            <input type="button" class="BUTTON_RESET" onclick="Reset();" value="Next Frame" />
           </div>
           <div class="col-6">
-            <input type="button" class="BUTTON_NEW_MATCH" onclick="ResetMatch();" value="Nový zápas" />
+            <input type="button" class="BUTTON_NEW_MATCH" onclick="ResetMatch();" value="New Match" />
           </div>
         </div>
       </div>

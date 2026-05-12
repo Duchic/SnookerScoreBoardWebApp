@@ -220,9 +220,10 @@ function RefreshUI() {
     document.getElementById("p2points").innerHTML = 'Points: ' + p2point;
     document.getElementById("p2break").innerHTML  = 'Break: '  + p2break;
 
-    var aheadLbl = diff > 0 ? "Vedete o" : diff < 0 ? "Zaostáváte o" : "Remíza";
+    var gap = p1point - p2point;
+    var aheadLbl = gap > 0 ? "P1 ahead" : gap < 0 ? "P2 ahead" : "Tied";
     document.getElementById("ahead_lbl").innerText  = aheadLbl;
-    document.getElementById("ahead").innerText      = Math.abs(diff);
+    document.getElementById("ahead").innerText      = Math.abs(gap);
 
     document.getElementById("remaining").innerText  = remaining;
     document.getElementById("maxPoints").innerText  = myScore + remaining;
