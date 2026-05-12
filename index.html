@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/simple-grid.css">
     <title>Snooker score board</title>
 </head>
 <body>
     <div class="container">
-        <div class="row">
-          <div class="col-3">
+        <div class="row players-row">
+          <div class="col-6">
             <div class="frame-score-container">
               <div class="frame-score" id="p1-frames">0</div>
               <div class="frame-score-label">frames</div>
             </div>
             <input type="text" class="player-name-input" id="p1-name" value="Player 1" />
+            <h3 class="center" id="p1points">Points: 0</h3>
+            <h3 class="center" id="p1break">Break: 0</h3>
             <input type="button" class="BUTTON_RED" onclick="Red('p1');" name="p1red" id="p1red" value="Red" />
             <input type="button" class="BUTTON_BLACK" onclick="Black('p1');" name="p1black" id="p1black" value="Black" />
             <input type="button" class="BUTTON_PINK" onclick="Pink('p1');" name="p1pink" id="p1pink" value="Pink" />
@@ -20,31 +23,22 @@
             <input type="button" class="BUTTON_BROWN" onclick="Brown('p1');" name="p1brown" id="p1brown" value="Brown" />
             <input type="button" class="BUTTON_GREEN" onclick="Green('p1');" name="p1green" id="p1green" value="Green" />
             <input type="button" class="BUTTON_YELLOW" onclick="Yellow('p1');" name="p1yellow" id="p1yellow" value="Yellow" />
+            <div class="fouls-row">
+              <input type="button" class="BUTTON_FOUL" onclick="Foul7('p1');" name="p1foul7" id="p1foul7" value="Foul7" />
+              <input type="button" class="BUTTON_FOUL" onclick="Foul6('p1');" name="p1foul6" id="p1foul6" value="Foul6" />
+              <input type="button" class="BUTTON_FOUL" onclick="Foul5('p1');" name="p1foul5" id="p1foul5" value="Foul5" />
+              <input type="button" class="BUTTON_FOUL" onclick="Foul4('p1');" name="p1foul4" id="p1foul4" value="Foul4" />
+            </div>
+            <input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p1');" value="Výhra framu" />
           </div>
-          <div class="col-3">
-            <h3 class="center" id="p1points">POINTS 0</h3>
-            <h3 class="center" id="p1break">BREAK 0</h3>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul7('p1');" name="p1foul7" id="p1foul7" value="Foul7" /></div>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul6('p1');" name="p1foul6" id="p1foul6" value="Foul6" /></div>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul5('p1');" name="p1foul5" id="p1foul5" value="Foul5" /></div>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul4('p1');" name="p1foul4" id="p1foul4" value="Foul4" /></div>
-            <div><input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p1');" value="Výhra framu" /></div>
-          </div>
-          <div class="col-3">
-            <h3 class="center" id="p2points">POINTS 0</h3>
-            <h3 class="center" id="p2break">BREAK 0</h3>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul7('p2');" name="p2foul7" id="p2foul7" value="Foul7" /></div>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul6('p2');" name="p2foul6" id="p2foul6" value="Foul6" /></div>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul5('p2');" name="p2foul5" id="p2foul5" value="Foul5" /></div>
-            <div><input type="button" class="BUTTON_FOUL" onclick="Foul4('p2');" name="p2foul4" id="p2foul4" value="Foul4" /></div>
-            <div><input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p2');" value="Výhra framu" /></div>
-          </div>
-          <div class="col-3">
+          <div class="col-6">
             <div class="frame-score-container">
               <div class="frame-score" id="p2-frames">0</div>
               <div class="frame-score-label">frames</div>
             </div>
             <input type="text" class="player-name-input" id="p2-name" value="Player 2" />
+            <h3 class="center" id="p2points">Points: 0</h3>
+            <h3 class="center" id="p2break">Break: 0</h3>
             <input type="button" class="BUTTON_RED" onclick="Red('p2');" name="p2red" id="p2red" value="Red" />
             <input type="button" class="BUTTON_BLACK" onclick="Black('p2');" name="p2black" id="p2black" value="Black" />
             <input type="button" class="BUTTON_PINK" onclick="Pink('p2');" name="p2pink" id="p2pink" value="Pink" />
@@ -52,9 +46,16 @@
             <input type="button" class="BUTTON_BROWN" onclick="Brown('p2');" name="p2brown" id="p2brown" value="Brown" />
             <input type="button" class="BUTTON_GREEN" onclick="Green('p2');" name="p2green" id="p2green" value="Green" />
             <input type="button" class="BUTTON_YELLOW" onclick="Yellow('p2');" name="p2yellow" id="p2yellow" value="Yellow" />
+            <div class="fouls-row">
+              <input type="button" class="BUTTON_FOUL" onclick="Foul7('p2');" name="p2foul7" id="p2foul7" value="Foul7" />
+              <input type="button" class="BUTTON_FOUL" onclick="Foul6('p2');" name="p2foul6" id="p2foul6" value="Foul6" />
+              <input type="button" class="BUTTON_FOUL" onclick="Foul5('p2');" name="p2foul5" id="p2foul5" value="Foul5" />
+              <input type="button" class="BUTTON_FOUL" onclick="Foul4('p2');" name="p2foul4" id="p2foul4" value="Foul4" />
+            </div>
+            <input type="button" class="BUTTON_WIN_FRAME" onclick="WinFrame('p2');" value="Výhra framu" />
           </div>
         </div>
-        <div class="row">
+        <div class="row controls-row">
           <div class="col-6">
             <input type="button" class="BUTTON_SWITCH" onclick="TogglePlayer();" value="Přepnout hráče" />
           </div>
@@ -62,7 +63,7 @@
             <input type="button" class="BUTTON_UNDO" onclick="Undo();" id="btn-undo" value="↩ Zpět" disabled />
           </div>
         </div>
-        <div class="row">
+        <div class="row stats-row">
           <div class="col-3">
             <h5 class="center" id="ahead_lbl">Remíza</h5>
             <h5 class="center" id="ahead">0</h5>
@@ -103,7 +104,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row bottom-row">
           <div class="col-6">
             <input type="button" class="BUTTON_RESET" onclick="Reset();" value="Další frame" />
           </div>
@@ -112,6 +113,6 @@
           </div>
         </div>
       </div>
-      <script src = "js/script.js" type="text/javascript"></script>
+      <script src="js/script.js" type="text/javascript"></script>
 </body>
 </html>

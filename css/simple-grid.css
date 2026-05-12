@@ -873,3 +873,124 @@ input[type="button"]:disabled {
   border-radius: 20px;
   text-decoration: none;
 }
+
+/* === TOUCH / MOBILE === */
+
+input[type="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Fouls always in 2×2 grid */
+.fouls-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.fouls-row .BUTTON_FOUL {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* Tablet / small screens (< 720px) */
+@media only screen and (max-width: 44.99em) {
+  .container { width: 96%; }
+
+  /* Keep player columns, controls and bottom buttons side by side */
+  .players-row .col-6,
+  .controls-row .col-6,
+  .bottom-row  .col-6 { width: 46%; }
+
+  /* Stats: 2 per row instead of 4 */
+  .stats-row .col-3 { width: 46%; }
+
+  /* Ball buttons */
+  .BUTTON_RED,
+  .BUTTON_YELLOW,
+  .BUTTON_GREEN,
+  .BUTTON_BROWN,
+  .BUTTON_BLUE,
+  .BUTTON_PINK,
+  .BUTTON_BLACK {
+    height: 34px;
+    line-height: 16px;
+    font-size: 18px;
+    padding: 1px;
+    margin-bottom: 3px;
+  }
+  .BUTTON_RED { margin-bottom: 6px; }
+
+  .BUTTON_FOUL {
+    height: 30px;
+    line-height: 14px;
+    font-size: 13px;
+    padding: 1px;
+  }
+
+  .BUTTON_WIN_FRAME {
+    height: 34px;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .BUTTON_SWITCH,
+  .BUTTON_UNDO {
+    height: 42px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .BUTTON_RESET,
+  .BUTTON_NEW_MATCH {
+    height: 46px;
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  h3 { font-size: 0.9rem;  margin: 2px 0; }
+  h5 { font-size: 0.75rem; margin: 1px 0; }
+
+  .frame-score           { font-size: 1.6rem; }
+  .frame-score-container { margin-bottom: 3px; }
+  .player-name-input     { font-size: 1rem; margin-bottom: 4px; }
+
+  .progress-section        { margin: 8px 0; }
+  .progress-bar-container  { height: 30px; }
+  .progress-bar            { border-radius: 15px; }
+  .progress-win-marker     { top: -5px; bottom: -5px; }
+}
+
+/* Very small phones (< 400px) */
+@media only screen and (max-width: 25em) {
+  .BUTTON_RED,
+  .BUTTON_YELLOW,
+  .BUTTON_GREEN,
+  .BUTTON_BROWN,
+  .BUTTON_BLUE,
+  .BUTTON_PINK,
+  .BUTTON_BLACK {
+    height: 28px;
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 2px;
+  }
+  .BUTTON_RED { margin-bottom: 4px; }
+
+  .BUTTON_FOUL {
+    height: 26px;
+    font-size: 11px;
+    line-height: 12px;
+  }
+
+  .BUTTON_WIN_FRAME {
+    height: 28px;
+    font-size: 12px;
+    line-height: 14px;
+  }
+
+  .frame-score       { font-size: 1.3rem; }
+  .player-name-input { font-size: 0.85rem; }
+  h3                 { font-size: 0.8rem; }
+  h5                 { font-size: 0.7rem; }
+}
