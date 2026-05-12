@@ -12,7 +12,7 @@ var currentPlayer = "p1";
 var p1frames = 0;
 var p2frames = 0;
 
-var history = [];
+var undoStack = [];
 
 const RED = 1;
 const BLACK = 7;
@@ -24,7 +24,7 @@ const YELLOW = 2;
 
 
 function saveState() {
-    history.push({
+    undoStack.push({
         p1point:         p1point,
         p1break:         p1break,
         p2point:         p2point,
@@ -36,8 +36,8 @@ function saveState() {
 }
 
 function Undo() {
-    if (history.length === 0) return;
-    var state = history.pop();
+    if (undoStack.length === 0) return;
+    var state = undoStack.pop();
     p1point         = state.p1point;
     p1break         = state.p1break;
     p2point         = state.p2point;
@@ -191,7 +191,7 @@ function WinFrame(player) {
 }
 
 function Reset() {
-    history = [];
+    undoStack = [];
     p1point = 0;
     p1break = 0;
     p2point = 0;
@@ -234,9 +234,9 @@ function RefreshUI() {
     toWinEl.style.color  = toWin === 0                        ? "#1a8a1a" : "";
     maxEl.style.color    = myScore + remaining < oppScore     ? "#cc2200" : "";
 
-    document.getElementById("p1-frames").innerText = p1frames;
-    document.getElementById("p2-frames").innerText = p2frames;
-    document.getElementById("btn-undo").disabled = history.length === 0;
+    var f1 = document.getElementById("p1-frames"); if (f1) f1.innerText = p1frames;
+    var f2 = document.getElementById("p2-frames"); if (f2) f2.innerText = p2frames;
+    document.getElementById("btn-undo").disabled = undoStack.length === 0;
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
 }
