@@ -1004,6 +1004,36 @@ h5 {
   font-size: 0.66rem;
 }
 
+.language-row .col-12 {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+}
+
+.language-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.BUTTON_LANG {
+  min-width: 38px;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid #999999;
+  background: #eeeeee;
+  color: #333447;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.BUTTON_LANG.active-language {
+  background: #333447;
+  color: #ffffff;
+  border-color: #333447;
+}
+
 /* === TOUCH / MOBILE === */
 
 input[type="button"] {

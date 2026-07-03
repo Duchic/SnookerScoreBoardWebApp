@@ -23,6 +23,113 @@ const BROWN = 4;
 const GREEN = 3;
 const YELLOW = 2;
 
+var currentLanguage = LoadLanguage();
+
+function IsLanguageSupported(language) {
+    return typeof I18N !== "undefined" && I18N.languages && I18N.languages[language];
+}
+
+function LoadLanguage() {
+    var language = "";
+    try {
+        language = localStorage.getItem("snookerScoreboardLanguage") || "";
+    } catch (e) {}
+
+    if (IsLanguageSupported(language)) return language;
+
+    var browserLanguage = "";
+    if (typeof navigator !== "undefined" && navigator.language) {
+        browserLanguage = navigator.language.slice(0, 2).toLowerCase();
+    }
+
+    if (IsLanguageSupported(browserLanguage)) return browserLanguage;
+    return typeof I18N !== "undefined" ? I18N.defaultLanguage : "en";
+}
+
+function T(key) {
+    if (!IsLanguageSupported(currentLanguage)) return key;
+    return I18N.languages[currentLanguage][key] || I18N.languages[I18N.defaultLanguage][key] || key;
+}
+
+function SetLanguage(language) {
+    if (!IsLanguageSupported(language)) return;
+    currentLanguage = language;
+    try {
+        localStorage.setItem("snookerScoreboardLanguage", language);
+    } catch (e) {}
+    ApplyLanguage();
+    RefreshUI();
+}
+
+function SetValue(id, value) {
+    var element = document.getElementById(id);
+    if (element) element.value = value;
+}
+
+function SetText(id, value) {
+    var element = document.getElementById(id);
+    if (element) element.innerText = value;
+}
+
+function IsDefaultPlayerName(value, key) {
+    for (var language in I18N.languages) {
+        if (I18N.languages[language][key] === value) return true;
+    }
+    return false;
+}
+
+function SetPlayerDefaultName(id, key) {
+    var element = document.getElementById(id);
+    if (!element || !IsDefaultPlayerName(element.value, key)) return;
+    element.value = T(key);
+}
+
+function ApplyLanguage() {
+    document.documentElement.lang = currentLanguage;
+    document.title = T("documentTitle");
+
+    SetValue("lang-cs", T("languageCs"));
+    SetValue("lang-en", T("languageEn"));
+    document.getElementById("lang-cs").className = "BUTTON_LANG" + (currentLanguage === "cs" ? " active-language" : "");
+    document.getElementById("lang-en").className = "BUTTON_LANG" + (currentLanguage === "en" ? " active-language" : "");
+
+    SetPlayerDefaultName("p1-name", "player1");
+    SetPlayerDefaultName("p2-name", "player2");
+
+    var colors = ["red", "black", "pink", "blue", "brown", "green", "yellow"];
+    colors.forEach(function(color) {
+        SetValue("p1" + color, T(color));
+        SetValue("p2" + color, T(color));
+    });
+
+    [7, 6, 5, 4].forEach(function(points) {
+        SetValue("p1foul" + points, T("foul" + points));
+        SetValue("p2foul" + points, T("foul" + points));
+    });
+
+    var frameLabels = document.getElementsByClassName("frame-score-label");
+    for (var i = 0; i < frameLabels.length; i++) frameLabels[i].innerText = T("frames");
+
+    var winButtons = document.getElementsByClassName("BUTTON_WIN_FRAME");
+    for (var j = 0; j < winButtons.length; j++) winButtons[j].value = T("winFrame");
+
+    SetValueByClass("BUTTON_SWITCH", T("switchPlayer"));
+    SetValue("btn-undo", T("undo"));
+    SetValueByClass("BUTTON_RESET", T("nextFrame"));
+    SetValueByClass("BUTTON_NEW_MATCH", T("newMatch"));
+
+    SetText("remaining_lbl", T("remaining"));
+    SetText("maxPoints_lbl", T("yourMax"));
+    SetText("toWin_lbl", T("youNeed"));
+    SetText("legend-current-label", T("playerScore"));
+    SetText("legend-potential-label", T("maxReachable"));
+    SetText("legend-marker-label", T("opponentNeedsSnooker"));
+}
+
+function SetValueByClass(className, value) {
+    var elements = document.getElementsByClassName(className);
+    for (var i = 0; i < elements.length; i++) elements[i].value = value;
+}
 
 function saveState() {
     undoStack.push({
@@ -239,13 +346,13 @@ function RefreshUI() {
     var oppScore  = isP1 ? p2point : p1point;
     var diff      = myScore - oppScore;
 
-    document.getElementById("p1points").innerHTML = 'Points: ' + p1point;
-    document.getElementById("p1break").innerHTML  = 'Break: '  + p1break;
-    document.getElementById("p2points").innerHTML = 'Points: ' + p2point;
-    document.getElementById("p2break").innerHTML  = 'Break: '  + p2break;
+    document.getElementById("p1points").innerHTML = T("points") + ': ' + p1point;
+    document.getElementById("p1break").innerHTML  = T("breakLabel") + ': '  + p1break;
+    document.getElementById("p2points").innerHTML = T("points") + ': ' + p2point;
+    document.getElementById("p2break").innerHTML  = T("breakLabel") + ': '  + p2break;
 
     var gap = p1point - p2point;
-    var aheadLbl = gap > 0 ? "P1 ahead" : gap < 0 ? "P2 ahead" : "Tied";
+    var aheadLbl = gap > 0 ? T("p1Ahead") : gap < 0 ? T("p2Ahead") : T("tied");
     document.getElementById("ahead_lbl").innerText  = aheadLbl;
     document.getElementById("ahead").innerText      = Math.abs(gap);
 
@@ -255,7 +362,7 @@ function RefreshUI() {
     var toWin = Math.max(0, oppScore + remaining - myScore + 1);
     var toWinEl   = document.getElementById("toWin");
     var maxEl     = document.getElementById("maxPoints");
-    toWinEl.innerText  = toWin > 0 ? toWin : "✓";
+    toWinEl.innerText  = toWin > 0 ? toWin : T("check");
     toWinEl.style.color  = toWin === 0                        ? "#1a8a1a" : "";
     maxEl.style.color    = myScore + remaining < oppScore     ? "#cc2200" : "";
 
@@ -342,4 +449,5 @@ function Remaining() {
 }
 
 
+ApplyLanguage();
 RefreshUI();

@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="cs">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/simple-grid.css">
     <title>Snooker score board</title>
 </head>
 <body>
     <div class="container">
+        <div class="row language-row">
+          <div class="col-12">
+            <div class="language-switch" aria-label="Language">
+              <input type="button" class="BUTTON_LANG" id="lang-cs" onclick="SetLanguage('cs');" value="CZ" />
+              <input type="button" class="BUTTON_LANG" id="lang-en" onclick="SetLanguage('en');" value="EN" />
+            </div>
+          </div>
+        </div>
         <div class="row players-row">
           <div class="col-6">
             <div class="frame-score-container">
@@ -98,9 +107,9 @@
               </div>
             </div>
             <div class="progress-legend">
-              <span class="legend-item"><span class="legend-dot" id="legend-current-dot"></span> Player score</span>
-              <span class="legend-item"><span class="legend-dot" id="legend-potential-dot"></span> Max reachable</span>
-              <span class="legend-item"><span class="legend-marker-icon"></span> Opponent needs snooker</span>
+              <span class="legend-item"><span class="legend-dot" id="legend-current-dot"></span> <span id="legend-current-label">Player score</span></span>
+              <span class="legend-item"><span class="legend-dot" id="legend-potential-dot"></span> <span id="legend-potential-label">Max reachable</span></span>
+              <span class="legend-item"><span class="legend-marker-icon"></span> <span id="legend-marker-label">Opponent needs snooker</span></span>
             </div>
           </div>
         </div>
@@ -113,6 +122,7 @@
           </div>
         </div>
       </div>
+      <script src="js/i18n.js" type="text/javascript"></script>
       <script src="js/script.js" type="text/javascript"></script>
 </body>
 </html>
