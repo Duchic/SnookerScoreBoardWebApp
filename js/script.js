@@ -6,6 +6,7 @@ var p2break = 0;
 var redcount = 15;
 const COLOR_FINISH = 27;
 var colorsRemaining = COLOR_FINISH;
+var finalColorPending = false;
 
 var currentPlayer = "p1";
 
@@ -31,6 +32,7 @@ function saveState() {
         p2break:         p2break,
         redcount:        redcount,
         colorsRemaining: colorsRemaining,
+        finalColorPending: finalColorPending,
         currentPlayer:   currentPlayer
     });
 }
@@ -44,6 +46,7 @@ function Undo() {
     p2break         = state.p2break;
     redcount        = state.redcount;
     colorsRemaining = state.colorsRemaining;
+    finalColorPending = state.finalColorPending;
     currentPlayer   = state.currentPlayer;
     RefreshUI();
 }
@@ -55,11 +58,13 @@ function Red(player) {
         p1break += RED;
         p1point += RED;
         redcount--;
+        if (redcount === 0) finalColorPending = true;
     } else {
         p1break = 0;
         p2point += RED;
         p2break += RED;
         redcount--;
+        if (redcount === 0) finalColorPending = true;
     }
     RefreshUI();
 }
@@ -75,7 +80,10 @@ function Black(player) {
         p2break += BLACK;
         p2point += BLACK;
     }
-    if (redcount === 0) colorsRemaining -= BLACK;
+    if (redcount === 0) {
+        if (finalColorPending) finalColorPending = false;
+        else colorsRemaining -= BLACK;
+    }
     RefreshUI();
 }
 
@@ -90,7 +98,10 @@ function Pink(player) {
         p2break += PINK;
         p2point += PINK;
     }
-    if (redcount === 0) colorsRemaining -= PINK;
+    if (redcount === 0) {
+        if (finalColorPending) finalColorPending = false;
+        else colorsRemaining -= PINK;
+    }
     RefreshUI();
 }
 
@@ -105,7 +116,10 @@ function Blue(player) {
         p2break += BLUE;
         p2point += BLUE;
     }
-    if (redcount === 0) colorsRemaining -= BLUE;
+    if (redcount === 0) {
+        if (finalColorPending) finalColorPending = false;
+        else colorsRemaining -= BLUE;
+    }
     RefreshUI();
 }
 
@@ -120,7 +134,10 @@ function Brown(player) {
         p2break += BROWN;
         p2point += BROWN;
     }
-    if (redcount === 0) colorsRemaining -= BROWN;
+    if (redcount === 0) {
+        if (finalColorPending) finalColorPending = false;
+        else colorsRemaining -= BROWN;
+    }
     RefreshUI();
 }
 
@@ -135,7 +152,10 @@ function Green(player) {
         p2break += GREEN;
         p2point += GREEN;
     }
-    if (redcount === 0) colorsRemaining -= GREEN;
+    if (redcount === 0) {
+        if (finalColorPending) finalColorPending = false;
+        else colorsRemaining -= GREEN;
+    }
     RefreshUI();
 }
 
@@ -150,7 +170,10 @@ function Yellow(player) {
         p2break += YELLOW;
         p2point += YELLOW;
     }
-    if (redcount === 0) colorsRemaining -= YELLOW;
+    if (redcount === 0) {
+        if (finalColorPending) finalColorPending = false;
+        else colorsRemaining -= YELLOW;
+    }
     RefreshUI();
 }
 
@@ -198,6 +221,7 @@ function Reset() {
     p2break = 0;
     redcount = 15;
     colorsRemaining = COLOR_FINISH;
+    finalColorPending = false;
     currentPlayer = "p1";
     RefreshUI();
 }
@@ -253,7 +277,10 @@ function UpdateActivePlayer() {
     p1Balls.forEach(function(id) { document.getElementById(id).disabled = !isP1; });
     p2Balls.forEach(function(id) { document.getElementById(id).disabled =  isP1; });
 
-    if (redcount === 0) {
+    if (redcount === 0 && finalColorPending) {
+        var activePrefix = isP1 ? "p1" : "p2";
+        document.getElementById(activePrefix + "red").disabled = true;
+    } else if (redcount === 0) {
         var colorSequence = {27: "yellow", 25: "green", 22: "brown", 18: "blue", 13: "pink", 7: "black"};
         var nextColor = colorSequence[colorsRemaining];
         var prefix = isP1 ? "p1" : "p2";
@@ -310,7 +337,8 @@ function AheadCount(p1point, p2point) {
 }
 
 function Remaining() {
-    return (redcount * (RED + BLACK)) + colorsRemaining;
+    if (redcount > 0) return (redcount * (RED + BLACK)) + colorsRemaining;
+    return colorsRemaining + (finalColorPending ? BLACK : 0);
 }
 
 
