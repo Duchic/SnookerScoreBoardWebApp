@@ -2,7 +2,7 @@ var I18N = {
     defaultLanguage: "cs",
     languages: {
         cs: {
-            documentTitle: "Snooker",
+            documentTitle: "Snooker scoore",
             languageCs: "CZ",
             languageEn: "EN",
             player1: "Hráč 1",
@@ -21,7 +21,7 @@ var I18N = {
             foul6: "Faul 6",
             foul5: "Faul 5",
             foul4: "Faul 4",
-            winFrame: "Vyhrál frame",
+            winFrame: "Výhra",
             switchPlayer: "Střídat hráče",
             undo: "↩ Zpět",
             tied: "Shoda",
