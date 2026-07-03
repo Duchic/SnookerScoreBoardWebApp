@@ -874,6 +874,136 @@ input[type="button"]:disabled {
   text-decoration: none;
 }
 
+/* === COMPACT SCOREBOARD LAYOUT === */
+
+.container {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.row [class^="col"] {
+  margin-top: 0.22rem;
+  margin-bottom: 0.22rem;
+}
+
+h3 {
+  font-size: 0.92rem;
+  margin: 2px 0;
+  line-height: 1.25;
+}
+
+h5 {
+  font-size: 0.78rem;
+  margin: 1px 0;
+  line-height: 1.2;
+}
+
+.frame-score-container {
+  margin-bottom: 2px;
+}
+
+.frame-score {
+  font-size: 1.6rem;
+}
+
+.frame-score-label {
+  font-size: 0.58rem;
+  line-height: 1.1;
+}
+
+.player-name-input {
+  font-size: 0.98rem;
+  padding: 1px 2px 0;
+  margin-bottom: 3px;
+  line-height: 1.25;
+}
+
+.BUTTON_RED,
+.BUTTON_YELLOW,
+.BUTTON_GREEN,
+.BUTTON_BROWN,
+.BUTTON_BLUE,
+.BUTTON_PINK,
+.BUTTON_BLACK {
+  height: 28px;
+  line-height: 14px;
+  font-size: 17px;
+  padding: 1px;
+  margin-bottom: 3px;
+}
+
+.BUTTON_RED {
+  margin-bottom: 5px;
+}
+
+.fouls-row {
+  gap: 3px;
+  margin-bottom: 5px;
+}
+
+.BUTTON_FOUL {
+  height: 26px;
+  line-height: 12px;
+  font-size: 13px;
+  padding: 1px;
+}
+
+.BUTTON_WIN_FRAME {
+  height: 28px;
+  line-height: 14px;
+  font-size: 14px;
+  padding: 1px;
+  margin-bottom: 4px;
+}
+
+.BUTTON_SWITCH,
+.BUTTON_UNDO {
+  height: 32px;
+  line-height: 16px;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.BUTTON_RESET,
+.BUTTON_NEW_MATCH {
+  height: 36px;
+  line-height: 18px;
+  font-size: 20px;
+  margin-top: 4px;
+}
+
+.progress-section {
+  margin: 4px 0;
+  gap: 8px;
+}
+
+.progress-bar-container {
+  height: 24px;
+}
+
+.progress-bar {
+  border-radius: 12px;
+}
+
+.progress-win-marker {
+  top: -4px;
+  bottom: -4px;
+}
+
+.progress-legend {
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.legend-item {
+  font-size: 0.72rem;
+}
+
+.bar-value-label,
+.marker-label {
+  font-size: 0.66rem;
+}
+
 /* === TOUCH / MOBILE === */
 
 input[type="button"] {
@@ -913,52 +1043,52 @@ input[type="button"] {
   .BUTTON_BLUE,
   .BUTTON_PINK,
   .BUTTON_BLACK {
-    height: 34px;
-    line-height: 16px;
-    font-size: 18px;
+    height: 28px;
+    line-height: 14px;
+    font-size: 16px;
     padding: 1px;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
   }
-  .BUTTON_RED { margin-bottom: 6px; }
+  .BUTTON_RED { margin-bottom: 4px; }
 
   .BUTTON_FOUL {
-    height: 30px;
-    line-height: 14px;
-    font-size: 13px;
+    height: 26px;
+    line-height: 12px;
+    font-size: 12px;
     padding: 1px;
   }
 
   .BUTTON_WIN_FRAME {
-    height: 34px;
-    font-size: 14px;
-    line-height: 16px;
+    height: 28px;
+    font-size: 13px;
+    line-height: 14px;
   }
 
   .BUTTON_SWITCH,
   .BUTTON_UNDO {
-    height: 42px;
-    font-size: 18px;
-    line-height: 22px;
+    height: 32px;
+    font-size: 16px;
+    line-height: 16px;
   }
 
   .BUTTON_RESET,
   .BUTTON_NEW_MATCH {
-    height: 46px;
-    font-size: 22px;
-    line-height: 26px;
+    height: 36px;
+    font-size: 19px;
+    line-height: 18px;
   }
 
-  h3 { font-size: 0.9rem;  margin: 2px 0; }
-  h5 { font-size: 0.75rem; margin: 1px 0; }
+  h3 { font-size: 0.78rem; margin: 1px 0; }
+  h5 { font-size: 0.68rem; margin: 1px 0; }
 
-  .frame-score           { font-size: 1.6rem; }
-  .frame-score-container { margin-bottom: 3px; }
-  .player-name-input     { font-size: 1rem; margin-bottom: 4px; }
+  .frame-score           { font-size: 1.35rem; }
+  .frame-score-container { margin-bottom: 2px; }
+  .player-name-input     { font-size: 0.85rem; margin-bottom: 2px; }
 
-  .progress-section        { margin: 8px 0; }
-  .progress-bar-container  { height: 30px; }
-  .progress-bar            { border-radius: 15px; }
-  .progress-win-marker     { top: -5px; bottom: -5px; }
+  .progress-section        { margin: 4px 0; }
+  .progress-bar-container  { height: 24px; }
+  .progress-bar            { border-radius: 12px; }
+  .progress-win-marker     { top: -4px; bottom: -4px; }
 }
 
 /* Very small phones (< 400px) */
