@@ -36,6 +36,7 @@ var I18N = {
             nextFrame: "Další frame",
             newMatch: "Nový zápas",
             snookerNeeded: "Snooker",
+            selectFrameWinner: "Frame je nerozhodný. Vyber vítěze tlačítkem Výhra.",
             check: "✓"
         },
         en: {
@@ -73,6 +74,7 @@ var I18N = {
             nextFrame: "Next Frame",
             newMatch: "New Match",
             snookerNeeded: "Snooker",
+            selectFrameWinner: "The frame is tied. Select the winner with the Win Frame button.",
             check: "✓"
         }
     }

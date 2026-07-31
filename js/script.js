@@ -312,6 +312,18 @@ function WinFrame(player) {
     Reset();
 }
 
+function NextFrame() {
+    if (p1point > p2point) {
+        p1frames++;
+        Reset();
+    } else if (p2point > p1point) {
+        p2frames++;
+        Reset();
+    } else {
+        alert(T("selectFrameWinner"));
+    }
+}
+
 function Reset() {
     undoStack = [];
     p1point = 0;
