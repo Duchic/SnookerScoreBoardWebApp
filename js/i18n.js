@@ -35,6 +35,7 @@ var I18N = {
             opponentNeedsSnooker: "Soupeř potřebuje snooker",
             nextFrame: "Další frame",
             newMatch: "Nový zápas",
+            snookerNeeded: "Snooker",
             check: "✓"
         },
         en: {
@@ -71,6 +72,7 @@ var I18N = {
             opponentNeedsSnooker: "Opponent needs snooker",
             nextFrame: "Next Frame",
             newMatch: "New Match",
+            snookerNeeded: "Snooker",
             check: "✓"
         }
     }

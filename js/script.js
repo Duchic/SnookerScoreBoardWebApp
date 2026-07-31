@@ -351,12 +351,12 @@ function RefreshUI() {
     document.getElementById("remaining").innerText  = remaining;
     document.getElementById("maxPoints").innerText  = myScore + remaining;
 
-    var toWin = Math.max(0, oppScore + remaining - myScore + 1);
+    var snookerTarget = GetSnookerTarget(myScore, oppScore, remaining);
     var toWinEl   = document.getElementById("toWin");
     var maxEl     = document.getElementById("maxPoints");
-    toWinEl.innerText  = toWin > 0 ? toWin : T("check");
-    toWinEl.style.color  = toWin === 0                        ? "#1a8a1a" : "";
-    maxEl.style.color    = myScore + remaining < oppScore     ? "#cc2200" : "";
+    toWinEl.innerText    = snookerTarget.reachable ? (snookerTarget.pointsNeeded > 0 ? snookerTarget.pointsNeeded : T("check")) : T("snookerNeeded");
+    toWinEl.style.color  = snookerTarget.pointsNeeded === 0 ? "#1a8a1a" : snookerTarget.reachable ? "" : "#cc2200";
+    maxEl.style.color    = myScore + remaining <= oppScore ? "#cc2200" : "";
 
     var f1 = document.getElementById("p1-frames"); if (f1) f1.innerText = p1frames;
     var f2 = document.getElementById("p2-frames"); if (f2) f2.innerText = p2frames;
@@ -431,14 +431,42 @@ function UpdateProgressBars(remaining) {
     maxLabelEl.style.color = currentColor;
     maxLabelEl.innerText   = maxVal;
 
-    var markerVal = oppScore + remaining;
-    var markerPct = clampPct(markerVal / scale * 100);
-    document.getElementById("bar-win-marker").style.left  = markerPct + "%";
-    document.getElementById("bar-marker-label").innerText = markerVal;
+    var snookerTarget = GetSnookerTarget(myScore, oppScore, remaining);
+    var markerEl = document.getElementById("bar-win-marker");
+
+    if (snookerTarget.reachable) {
+        var markerPct = clampPct(snookerTarget.score / scale * 100);
+        markerEl.style.display = "";
+        markerEl.style.left = markerPct + "%";
+        document.getElementById("bar-marker-label").innerText = snookerTarget.score;
+    } else {
+        markerEl.style.display = "none";
+        document.getElementById("bar-marker-label").innerText = "";
+    }
 }
 
 function clampPct(pct) {
     return Math.min(Math.max(pct, 0), 100);
+}
+
+function GetSnookerTarget(myScore, oppScore, remaining) {
+    var maxScore = myScore + remaining;
+
+    if (myScore > oppScore + remaining) {
+        return {
+            score: myScore,
+            pointsNeeded: 0,
+            reachable: true
+        };
+    }
+
+    var targetScore = Math.floor((myScore + oppScore + remaining) / 2) + 1;
+
+    return {
+        score: targetScore,
+        pointsNeeded: Math.max(0, targetScore - myScore),
+        reachable: targetScore <= maxScore
+    };
 }
 
 function AheadCount(p1point, p2point) {
