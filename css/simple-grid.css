@@ -973,26 +973,30 @@ h5 {
 }
 
 .progress-section {
-  margin: 4px 0;
+  margin: 12px 0 4px;
   gap: 8px;
 }
 
 .progress-bar-container {
-  height: 24px;
+  height: 50px;
 }
 
 .progress-bar {
+  top: 14px;
+  bottom: auto;
+  height: 24px;
   border-radius: 12px;
 }
 
 .progress-win-marker {
-  top: -4px;
-  bottom: -4px;
+  top: 10px;
+  bottom: auto;
+  height: 32px;
 }
 
 .progress-legend {
   gap: 12px;
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .legend-item {
@@ -1002,6 +1006,14 @@ h5 {
 .bar-value-label,
 .marker-label {
   font-size: 0.66rem;
+}
+
+.marker-label {
+  bottom: calc(100% + 1px);
+}
+
+.bar-value-label {
+  top: 39px;
 }
 
 .language-row .col-12 {
@@ -1115,10 +1127,11 @@ input[type="button"] {
   .frame-score-container { margin-bottom: 2px; }
   .player-name-input     { font-size: 0.85rem; margin-bottom: 2px; }
 
-  .progress-section        { margin: 4px 0; }
-  .progress-bar-container  { height: 24px; }
+  .progress-section        { margin: 11px 0 3px; }
+  .progress-bar-container  { height: 46px; }
   .progress-bar            { border-radius: 12px; }
-  .progress-win-marker     { top: -4px; bottom: -4px; }
+  .progress-win-marker     { top: 9px; bottom: auto; height: 30px; }
+  .bar-value-label         { top: 36px; }
 }
 
 /* Very small phones (< 400px) */
