@@ -60,6 +60,10 @@ function T(key) {
     return I18N.languages[currentLanguage][key] || I18N.languages[I18N.defaultLanguage][key] || key;
 }
 
+function TPoints(key, points) {
+    return T(key).replace("{points}", points);
+}
+
 function SetLanguage(language) {
     if (!IsLanguageSupported(language)) return;
     currentLanguage = language;
@@ -394,12 +398,35 @@ function RefreshUI() {
     document.getElementById("remaining").innerText  = remaining;
     document.getElementById("maxPoints").innerText  = myScore + remaining;
 
+    var frameStatus = GetFrameStatus(myScore, oppScore, remaining);
     var snookerTarget = GetSnookerTarget(myScore, oppScore, remaining);
     var toWinEl   = document.getElementById("toWin");
     var maxEl     = document.getElementById("maxPoints");
-    toWinEl.innerText    = snookerTarget.reachable ? (snookerTarget.pointsNeeded > 0 ? snookerTarget.pointsNeeded : T("check")) : T("snookerNeeded");
-    toWinEl.style.color  = snookerTarget.pointsNeeded === 0 ? "#1a8a1a" : snookerTarget.reachable ? "" : "#cc2200";
-    maxEl.style.color    = myScore + remaining <= oppScore ? "#cc2200" : "";
+    toWinEl.title = "";
+
+    if (gamePhase === PHASE_RESPOTTED_BLACK) {
+        toWinEl.innerText = T("blackDecides");
+        toWinEl.style.color = "#a65d00";
+        toWinEl.title = T("blackDecidesTitle");
+    } else if (frameStatus.type === "safe") {
+        toWinEl.innerText = T("check");
+        toWinEl.style.color = "#16731a";
+        toWinEl.title = TPoints("opponentNeedsPenaltyTitle", frameStatus.penaltyPoints);
+    } else if (frameStatus.type === "tiePossible") {
+        toWinEl.innerText = T("tiePossible");
+        toWinEl.style.color = "#a65d00";
+        toWinEl.title = T("tiePossibleTitle");
+    } else if (frameStatus.type === "needsPenalty") {
+        toWinEl.innerText = TPoints("penaltyPointsShort", frameStatus.penaltyPoints);
+        toWinEl.style.color = "#b00020";
+        toWinEl.title = TPoints("penaltyPointsTitle", frameStatus.penaltyPoints);
+    } else {
+        toWinEl.innerText = snookerTarget.pointsNeeded;
+        toWinEl.style.color = "";
+    }
+
+    maxEl.style.color = frameStatus.type === "needsPenalty" ? "#b00020" :
+        frameStatus.type === "tiePossible" || gamePhase === PHASE_RESPOTTED_BLACK ? "#a65d00" : "";
 
     var f1 = document.getElementById("p1-frames"); if (f1) f1.innerText = p1frames;
     var f2 = document.getElementById("p2-frames"); if (f2) f2.innerText = p2frames;
@@ -491,10 +518,17 @@ function UpdateProgressBars(remaining) {
     maxLabelEl.style.color = currentColor;
     maxLabelEl.innerText   = maxVal;
 
+    var frameStatus = GetFrameStatus(myScore, oppScore, remaining);
     var snookerTarget = GetSnookerTarget(myScore, oppScore, remaining);
     var markerEl = document.getElementById("bar-win-marker");
 
-    if (snookerTarget.reachable) {
+    if (frameStatus.type === "needsPenalty") {
+        maxLabelEl.style.color = "#b00020";
+    } else if (frameStatus.type === "tiePossible" || gamePhase === PHASE_RESPOTTED_BLACK) {
+        maxLabelEl.style.color = "#a65d00";
+    }
+
+    if (snookerTarget.reachable && gamePhase !== PHASE_RESPOTTED_BLACK) {
         var markerPct = clampPct(snookerTarget.score / scale * 100);
         markerEl.style.display = "";
         markerEl.style.left = markerPct + "%";
@@ -509,10 +543,42 @@ function clampPct(pct) {
     return Math.min(Math.max(pct, 0), 100);
 }
 
+function GetFrameStatus(myScore, oppScore, remaining) {
+    var maxScore = myScore + remaining;
+    var opponentMaxScore = oppScore + remaining;
+
+    if (myScore > opponentMaxScore) {
+        return {
+            type: "safe",
+            penaltyPoints: myScore - opponentMaxScore
+        };
+    }
+
+    if (maxScore < oppScore) {
+        return {
+            type: "needsPenalty",
+            penaltyPoints: oppScore - maxScore
+        };
+    }
+
+    if (maxScore === oppScore) {
+        return {
+            type: "tiePossible",
+            penaltyPoints: 0
+        };
+    }
+
+    return {
+        type: "inPlay",
+        penaltyPoints: 0
+    };
+}
+
 function GetSnookerTarget(myScore, oppScore, remaining) {
     var maxScore = myScore + remaining;
+    var frameStatus = GetFrameStatus(myScore, oppScore, remaining);
 
-    if (myScore > oppScore + remaining) {
+    if (frameStatus.type === "safe") {
         return {
             score: myScore,
             pointsNeeded: 0,
@@ -525,7 +591,7 @@ function GetSnookerTarget(myScore, oppScore, remaining) {
     return {
         score: targetScore,
         pointsNeeded: Math.max(0, targetScore - myScore),
-        reachable: targetScore <= maxScore
+        reachable: frameStatus.type === "inPlay" && targetScore <= maxScore
     };
 }
 
