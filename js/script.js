@@ -15,6 +15,9 @@ const PHASE_FRAME_OVER = "frameOver";
 var gamePhase = PHASE_REDS;
 
 var currentPlayer = "p1";
+var frameStarter = "p1";
+var playAgainAvailable = false;
+var foulOffender = null;
 
 var p1frames = 0;
 var p2frames = 0;
@@ -120,6 +123,7 @@ function ApplyLanguage() {
     for (var j = 0; j < winButtons.length; j++) winButtons[j].value = T("winFrame");
 
     SetValueByClass("BUTTON_SWITCH", T("switchPlayer"));
+    SetValue("btn-play-again", T("playAgain"));
     SetValue("btn-undo", T("undo"));
     SetValueByClass("BUTTON_RESET", T("nextFrame"));
     SetValueByClass("BUTTON_NEW_MATCH", T("newMatch"));
@@ -146,7 +150,10 @@ function saveState() {
         redcount:        redcount,
         colorsRemaining: colorsRemaining,
         gamePhase:       gamePhase,
-        currentPlayer:   currentPlayer
+        currentPlayer:   currentPlayer,
+        frameStarter:    frameStarter,
+        playAgainAvailable: playAgainAvailable,
+        foulOffender:    foulOffender
     });
 }
 
@@ -161,12 +168,21 @@ function Undo() {
     colorsRemaining = state.colorsRemaining;
     gamePhase        = state.gamePhase;
     currentPlayer   = state.currentPlayer;
+    frameStarter    = state.frameStarter;
+    playAgainAvailable = state.playAgainAvailable;
+    foulOffender    = state.foulOffender;
     RefreshUI();
+}
+
+function ClearPlayAgainOption() {
+    playAgainAvailable = false;
+    foulOffender = null;
 }
 
 function Red(player) {
     if (player !== currentPlayer || gamePhase !== PHASE_REDS || redcount <= 0) return;
     saveState();
+    ClearPlayAgainOption();
     if (player === "p1"){
         p2break = 0;
         p1break += RED;
@@ -226,6 +242,7 @@ function UpdatePhaseAfterColor(value) {
 function PotColor(player, value) {
     if (!CanPotColor(player, value)) return;
     saveState();
+    ClearPlayAgainOption();
     if (player === "p1"){
         p2break = 0;
         p1break += value;
@@ -249,6 +266,7 @@ function Yellow(player) { PotColor(player, YELLOW); }
 function applyFoul(player, points) {
     if (player !== currentPlayer || gamePhase === PHASE_FRAME_OVER) return;
     saveState();
+    ClearPlayAgainOption();
     if (player === "p1") {
         p1break = 0;
         p2point += points;
@@ -271,6 +289,11 @@ function applyFoul(player, points) {
     } else if (gamePhase === PHASE_COLOR_AFTER_RED) {
         gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
     }
+
+    if (gamePhase !== PHASE_FRAME_OVER && gamePhase !== PHASE_RESPOTTED_BLACK) {
+        playAgainAvailable = true;
+        foulOffender = player;
+    }
     RefreshUI();
 }
 
@@ -279,9 +302,22 @@ function Foul6(player) { applyFoul(player, PINK);  }
 function Foul5(player) { applyFoul(player, BLUE);  }
 function Foul4(player) { applyFoul(player, BROWN); }
 
+function PlayAgain() {
+    if (!playAgainAvailable || !foulOffender || gamePhase === PHASE_FRAME_OVER) return;
+    saveState();
+    currentPlayer = foulOffender;
+    p1break = 0;
+    p2break = 0;
+    ClearPlayAgainOption();
+    RefreshUI();
+}
+
 function TogglePlayer() {
     if (gamePhase === PHASE_FRAME_OVER) return;
+    var selectingFrameStarter = gamePhase === PHASE_REDS && redcount === 15 &&
+        p1point === 0 && p2point === 0;
     saveState();
+    ClearPlayAgainOption();
     if (currentPlayer === "p1") {
         p1break = 0;
         currentPlayer = "p2";
@@ -289,6 +325,7 @@ function TogglePlayer() {
         p2break = 0;
         currentPlayer = "p1";
     }
+    if (selectingFrameStarter) frameStarter = currentPlayer;
     if (gamePhase === PHASE_COLOR_AFTER_RED) {
         gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
     }
@@ -298,7 +335,7 @@ function TogglePlayer() {
 function WinFrame(player) {
     if (player === "p1") p1frames++;
     else                 p2frames++;
-    Reset();
+    Reset(true);
 }
 
 function NextFrame() {
@@ -306,16 +343,17 @@ function NextFrame() {
         alert(T("frameInProgress"));
     } else if (p1point > p2point) {
         p1frames++;
-        Reset();
+        Reset(true);
     } else if (p2point > p1point) {
         p2frames++;
-        Reset();
+        Reset(true);
     } else {
         alert(T("selectFrameWinner"));
     }
 }
 
-function Reset() {
+function Reset(advanceStarter) {
+    if (advanceStarter) frameStarter = frameStarter === "p1" ? "p2" : "p1";
     undoStack = [];
     p1point = 0;
     p1break = 0;
@@ -324,14 +362,16 @@ function Reset() {
     redcount = 15;
     colorsRemaining = COLOR_FINISH;
     gamePhase = PHASE_REDS;
-    currentPlayer = "p1";
+    currentPlayer = frameStarter;
+    ClearPlayAgainOption();
     RefreshUI();
 }
 
 function ResetMatch() {
     p1frames = 0;
     p2frames = 0;
-    Reset();
+    frameStarter = "p1";
+    Reset(false);
 }
 
 function RefreshUI() {
@@ -385,6 +425,9 @@ function UpdateActivePlayer() {
         document.getElementById("p2foul" + points).disabled = frameOver || isP1;
     });
     document.getElementById("btn-switch").disabled = frameOver;
+    var playAgainButton = document.getElementById("btn-play-again");
+    playAgainButton.disabled = !playAgainAvailable || frameOver;
+    playAgainButton.style.display = playAgainAvailable && !frameOver ? "" : "none";
     var nextFrameButtons = document.getElementsByClassName("BUTTON_RESET");
     for (var i = 0; i < nextFrameButtons.length; i++) nextFrameButtons[i].disabled = !frameOver;
 
