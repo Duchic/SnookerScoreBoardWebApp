@@ -782,8 +782,16 @@ input[type="button"]:disabled {
   opacity: 0.6;
 }
 
-.BUTTON_PLAY_AGAIN {
-  width: 100%;
+.foul-decision-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.BUTTON_PLAY_AGAIN,
+.BUTTON_FREE_BALL {
+  flex: 1;
+  min-width: 0;
+  width: auto;
   height: 34px;
   border: 0;
   border-radius: 17px;
@@ -799,6 +807,14 @@ input[type="button"]:disabled {
 
 .BUTTON_PLAY_AGAIN:hover:not(:disabled) {
   background-color: #374151;
+}
+
+.BUTTON_FREE_BALL {
+  background-color: #176b3a;
+}
+
+.BUTTON_FREE_BALL:hover:not(:disabled) {
+  background-color: #10512b;
 }
 
 .BUTTON_WIN_FRAME {
@@ -1088,6 +1104,9 @@ input[type="button"] {
 @media only screen and (max-width: 44.99em) {
   .container { width: 96%; }
 
+  .BUTTON_PLAY_AGAIN,
+  .BUTTON_FREE_BALL { font-size: 12px; }
+
   /* Keep player columns, controls and bottom buttons side by side */
   .players-row .col-6,
   .controls-row .col-6,
@@ -1155,6 +1174,9 @@ input[type="button"] {
 
 /* Very small phones (< 400px) */
 @media only screen and (max-width: 25em) {
+  .BUTTON_PLAY_AGAIN,
+  .BUTTON_FREE_BALL { font-size: 11px; }
+
   .BUTTON_RED,
   .BUTTON_YELLOW,
   .BUTTON_GREEN,

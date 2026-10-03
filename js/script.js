@@ -17,6 +17,7 @@ var gamePhase = PHASE_REDS;
 var currentPlayer = "p1";
 var frameStarter = "p1";
 var playAgainAvailable = false;
+var freeBallAvailable = false;
 var foulOffender = null;
 
 var p1frames = 0;
@@ -128,6 +129,7 @@ function ApplyLanguage() {
 
     SetValueByClass("BUTTON_SWITCH", T("switchPlayer"));
     SetValue("btn-play-again", T("playAgain"));
+    SetValue("btn-free-ball", T("freeBall"));
     SetValue("btn-undo", T("undo"));
     SetValueByClass("BUTTON_RESET", T("nextFrame"));
     SetValueByClass("BUTTON_NEW_MATCH", T("newMatch"));
@@ -157,6 +159,7 @@ function saveState() {
         currentPlayer:   currentPlayer,
         frameStarter:    frameStarter,
         playAgainAvailable: playAgainAvailable,
+        freeBallAvailable: freeBallAvailable,
         foulOffender:    foulOffender
     });
 }
@@ -174,19 +177,21 @@ function Undo() {
     currentPlayer   = state.currentPlayer;
     frameStarter    = state.frameStarter;
     playAgainAvailable = state.playAgainAvailable;
+    freeBallAvailable = state.freeBallAvailable;
     foulOffender    = state.foulOffender;
     RefreshUI();
 }
 
-function ClearPlayAgainOption() {
+function ClearFoulOptions() {
     playAgainAvailable = false;
+    freeBallAvailable = false;
     foulOffender = null;
 }
 
 function Red(player) {
     if (player !== currentPlayer || gamePhase !== PHASE_REDS || redcount <= 0) return;
     saveState();
-    ClearPlayAgainOption();
+    ClearFoulOptions();
     if (player === "p1"){
         p2break = 0;
         p1break += RED;
@@ -246,7 +251,7 @@ function UpdatePhaseAfterColor(value) {
 function PotColor(player, value) {
     if (!CanPotColor(player, value)) return;
     saveState();
-    ClearPlayAgainOption();
+    ClearFoulOptions();
     if (player === "p1"){
         p2break = 0;
         p1break += value;
@@ -267,10 +272,38 @@ function Brown(player)  { PotColor(player, BROWN);  }
 function Green(player)  { PotColor(player, GREEN);  }
 function Yellow(player) { PotColor(player, YELLOW); }
 
+function GetFreeBallValue() {
+    if (gamePhase === PHASE_REDS && redcount > 0) return RED;
+    if (gamePhase === PHASE_COLORS && colorsRemaining > BLACK) return GetNextColorValue();
+    return 0;
+}
+
+function FreeBall() {
+    var value = GetFreeBallValue();
+    if (!freeBallAvailable || !foulOffender || currentPlayer === foulOffender || value <= 0) return;
+
+    var wasRedOn = gamePhase === PHASE_REDS;
+    saveState();
+    ClearFoulOptions();
+
+    if (currentPlayer === "p1") {
+        p2break = 0;
+        p1break += value;
+        p1point += value;
+    } else {
+        p1break = 0;
+        p2break += value;
+        p2point += value;
+    }
+
+    if (wasRedOn) gamePhase = PHASE_COLOR_AFTER_RED;
+    RefreshUI();
+}
+
 function applyFoul(player, points) {
     if (player !== currentPlayer || gamePhase === PHASE_FRAME_OVER) return;
     saveState();
-    ClearPlayAgainOption();
+    ClearFoulOptions();
     if (player === "p1") {
         p1break = 0;
         p2point += points;
@@ -296,6 +329,7 @@ function applyFoul(player, points) {
 
     if (gamePhase !== PHASE_FRAME_OVER && gamePhase !== PHASE_RESPOTTED_BLACK) {
         playAgainAvailable = true;
+        freeBallAvailable = GetFreeBallValue() > 0;
         foulOffender = player;
     }
     RefreshUI();
@@ -312,7 +346,7 @@ function PlayAgain() {
     currentPlayer = foulOffender;
     p1break = 0;
     p2break = 0;
-    ClearPlayAgainOption();
+    ClearFoulOptions();
     RefreshUI();
 }
 
@@ -321,7 +355,7 @@ function TogglePlayer() {
     var selectingFrameStarter = gamePhase === PHASE_REDS && redcount === 15 &&
         p1point === 0 && p2point === 0;
     saveState();
-    ClearPlayAgainOption();
+    ClearFoulOptions();
     if (currentPlayer === "p1") {
         p1break = 0;
         currentPlayer = "p2";
@@ -367,7 +401,7 @@ function Reset(advanceStarter) {
     colorsRemaining = COLOR_FINISH;
     gamePhase = PHASE_REDS;
     currentPlayer = frameStarter;
-    ClearPlayAgainOption();
+    ClearFoulOptions();
     RefreshUI();
 }
 
@@ -455,6 +489,11 @@ function UpdateActivePlayer() {
     var playAgainButton = document.getElementById("btn-play-again");
     playAgainButton.disabled = !playAgainAvailable || frameOver;
     playAgainButton.style.display = playAgainAvailable && !frameOver ? "" : "none";
+    var freeBallButton = document.getElementById("btn-free-ball");
+    var freeBallValue = GetFreeBallValue();
+    freeBallButton.value = freeBallValue > 0 ? TPoints("freeBallWithPoints", freeBallValue) : T("freeBall");
+    freeBallButton.disabled = !freeBallAvailable || frameOver;
+    freeBallButton.style.display = freeBallAvailable && !frameOver ? "" : "none";
     var nextFrameButtons = document.getElementsByClassName("BUTTON_RESET");
     for (var i = 0; i < nextFrameButtons.length; i++) nextFrameButtons[i].disabled = !frameOver;
 
