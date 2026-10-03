@@ -36,6 +36,8 @@ var I18N = {
             nextFrame: "Další frame",
             newMatch: "Nový zápas",
             snookerNeeded: "Snooker",
+            frameInProgress: "Frame stále probíhá. Dohraj ho nebo vyber vítěze tlačítkem Výhra.",
+            respottedBlack: "Remíza. Černá byla znovu nasazena; tlačítkem Střídat hráče nastav hráče určeného losem.",
             selectFrameWinner: "Frame je nerozhodný. Vyber vítěze tlačítkem Výhra.",
             check: "✓"
         },
@@ -74,6 +76,8 @@ var I18N = {
             nextFrame: "Next Frame",
             newMatch: "New Match",
             snookerNeeded: "Snooker",
+            frameInProgress: "The frame is still in progress. Finish it or select the winner with the Win Frame button.",
+            respottedBlack: "The scores are tied. The black has been re-spotted; use Switch Player to select the player determined by lot.",
             selectFrameWinner: "The frame is tied. Select the winner with the Win Frame button.",
             check: "✓"
         }

@@ -6,7 +6,13 @@ var p2break = 0;
 var redcount = 15;
 const COLOR_FINISH = 27;
 var colorsRemaining = COLOR_FINISH;
-var colorPending = false;
+
+const PHASE_REDS = "reds";
+const PHASE_COLOR_AFTER_RED = "colorAfterRed";
+const PHASE_COLORS = "colors";
+const PHASE_RESPOTTED_BLACK = "respottedBlack";
+const PHASE_FRAME_OVER = "frameOver";
+var gamePhase = PHASE_REDS;
 
 var currentPlayer = "p1";
 
@@ -139,7 +145,7 @@ function saveState() {
         p2break:         p2break,
         redcount:        redcount,
         colorsRemaining: colorsRemaining,
-        colorPending:     colorPending,
+        gamePhase:       gamePhase,
         currentPlayer:   currentPlayer
     });
 }
@@ -153,128 +159,95 @@ function Undo() {
     p2break         = state.p2break;
     redcount        = state.redcount;
     colorsRemaining = state.colorsRemaining;
-    colorPending     = state.colorPending;
+    gamePhase        = state.gamePhase;
     currentPlayer   = state.currentPlayer;
     RefreshUI();
 }
 
 function Red(player) {
+    if (player !== currentPlayer || gamePhase !== PHASE_REDS || redcount <= 0) return;
     saveState();
     if (player === "p1"){
         p2break = 0;
         p1break += RED;
         p1point += RED;
-        redcount--;
-        colorPending = true;
     } else {
         p1break = 0;
         p2point += RED;
         p2break += RED;
-        redcount--;
-        colorPending = true;
     }
+    redcount--;
+    gamePhase = PHASE_COLOR_AFTER_RED;
     RefreshUI();
 }
 
-function UpdateTableAfterColor(value) {
-    if (colorPending) {
-        colorPending = false;
-    } else if (redcount === 0) {
-        colorsRemaining -= value;
+function GetNextColorValue() {
+    var colorSequence = {27: YELLOW, 25: GREEN, 22: BROWN, 18: BLUE, 13: PINK, 7: BLACK};
+    return colorSequence[colorsRemaining];
+}
+
+function CanPotColor(player, value) {
+    if (player !== currentPlayer) return false;
+    if (gamePhase === PHASE_COLOR_AFTER_RED) return true;
+    if (gamePhase === PHASE_COLORS) return value === GetNextColorValue();
+    return gamePhase === PHASE_RESPOTTED_BLACK && value === BLACK;
+}
+
+function EnterRespottedBlack() {
+    p1break = 0;
+    p2break = 0;
+    colorsRemaining = BLACK;
+    gamePhase = PHASE_RESPOTTED_BLACK;
+    alert(T("respottedBlack"));
+}
+
+function UpdatePhaseAfterColor(value) {
+    if (gamePhase === PHASE_COLOR_AFTER_RED) {
+        gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
+        return;
+    }
+
+    if (gamePhase === PHASE_RESPOTTED_BLACK) {
+        colorsRemaining = 0;
+        gamePhase = PHASE_FRAME_OVER;
+        return;
+    }
+
+    colorsRemaining -= value;
+    if (colorsRemaining === 0) {
+        if (p1point === p2point) {
+            EnterRespottedBlack();
+        } else {
+            gamePhase = PHASE_FRAME_OVER;
+        }
     }
 }
 
-function Black(player) {
+function PotColor(player, value) {
+    if (!CanPotColor(player, value)) return;
     saveState();
     if (player === "p1"){
         p2break = 0;
-        p1break += BLACK;
-        p1point += BLACK;
+        p1break += value;
+        p1point += value;
     } else {
         p1break = 0;
-        p2break += BLACK;
-        p2point += BLACK;
+        p2break += value;
+        p2point += value;
     }
-    UpdateTableAfterColor(BLACK);
+    UpdatePhaseAfterColor(value);
     RefreshUI();
 }
 
-function Pink(player) {
-    saveState();
-    if (player === "p1"){
-        p2break = 0;
-        p1break += PINK;
-        p1point += PINK;
-    } else {
-        p1break = 0;
-        p2break += PINK;
-        p2point += PINK;
-    }
-    UpdateTableAfterColor(PINK);
-    RefreshUI();
-}
-
-function Blue(player) {
-    saveState();
-    if (player === "p1"){
-        p2break = 0;
-        p1break += BLUE;
-        p1point += BLUE;
-    } else {
-        p1break = 0;
-        p2break += BLUE;
-        p2point += BLUE;
-    }
-    UpdateTableAfterColor(BLUE);
-    RefreshUI();
-}
-
-function Brown(player) {
-    saveState();
-    if (player === "p1"){
-        p2break = 0;
-        p1break += BROWN;
-        p1point += BROWN;
-    } else {
-        p1break = 0;
-        p2break += BROWN;
-        p2point += BROWN;
-    }
-    UpdateTableAfterColor(BROWN);
-    RefreshUI();
-}
-
-function Green(player) {
-    saveState();
-    if (player === "p1"){
-        p2break = 0;
-        p1break += GREEN;
-        p1point += GREEN;
-    } else {
-        p1break = 0;
-        p2break += GREEN;
-        p2point += GREEN;
-    }
-    UpdateTableAfterColor(GREEN);
-    RefreshUI();
-}
-
-function Yellow(player) {
-    saveState();
-    if (player === "p1"){
-        p2break = 0;
-        p1break += YELLOW;
-        p1point += YELLOW;
-    } else {
-        p1break = 0;
-        p2break += YELLOW;
-        p2point += YELLOW;
-    }
-    UpdateTableAfterColor(YELLOW);
-    RefreshUI();
-}
+function Black(player)  { PotColor(player, BLACK);  }
+function Pink(player)   { PotColor(player, PINK);   }
+function Blue(player)   { PotColor(player, BLUE);   }
+function Brown(player)  { PotColor(player, BROWN);  }
+function Green(player)  { PotColor(player, GREEN);  }
+function Yellow(player) { PotColor(player, YELLOW); }
 
 function applyFoul(player, points) {
+    if (player !== currentPlayer || gamePhase === PHASE_FRAME_OVER) return;
     saveState();
     if (player === "p1") {
         p1break = 0;
@@ -283,8 +256,21 @@ function applyFoul(player, points) {
         p2break = 0;
         p1point += points;
     }
-    colorPending = false;
     currentPlayer = player === "p1" ? "p2" : "p1";
+
+    if (gamePhase === PHASE_RESPOTTED_BLACK) {
+        colorsRemaining = 0;
+        gamePhase = PHASE_FRAME_OVER;
+    } else if (gamePhase === PHASE_COLORS && colorsRemaining === BLACK) {
+        if (p1point === p2point) {
+            EnterRespottedBlack();
+        } else {
+            colorsRemaining = 0;
+            gamePhase = PHASE_FRAME_OVER;
+        }
+    } else if (gamePhase === PHASE_COLOR_AFTER_RED) {
+        gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
+    }
     RefreshUI();
 }
 
@@ -294,6 +280,7 @@ function Foul5(player) { applyFoul(player, BLUE);  }
 function Foul4(player) { applyFoul(player, BROWN); }
 
 function TogglePlayer() {
+    if (gamePhase === PHASE_FRAME_OVER) return;
     saveState();
     if (currentPlayer === "p1") {
         p1break = 0;
@@ -302,7 +289,9 @@ function TogglePlayer() {
         p2break = 0;
         currentPlayer = "p1";
     }
-    colorPending = false;
+    if (gamePhase === PHASE_COLOR_AFTER_RED) {
+        gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
+    }
     RefreshUI();
 }
 
@@ -313,7 +302,9 @@ function WinFrame(player) {
 }
 
 function NextFrame() {
-    if (p1point > p2point) {
+    if (gamePhase !== PHASE_FRAME_OVER) {
+        alert(T("frameInProgress"));
+    } else if (p1point > p2point) {
         p1frames++;
         Reset();
     } else if (p2point > p1point) {
@@ -332,7 +323,7 @@ function Reset() {
     p2break = 0;
     redcount = 15;
     colorsRemaining = COLOR_FINISH;
-    colorPending = false;
+    gamePhase = PHASE_REDS;
     currentPlayer = "p1";
     RefreshUI();
 }
@@ -379,34 +370,48 @@ function RefreshUI() {
 
 function UpdateActivePlayer() {
     var isP1 = currentPlayer === "p1";
+    var frameOver = gamePhase === PHASE_FRAME_OVER;
 
     document.getElementById("p1-name").className = "player-name-input " + (isP1 ? "active-player-name" : "inactive-player-name");
     document.getElementById("p2-name").className = "player-name-input " + (isP1 ? "inactive-player-name" : "active-player-name");
 
     var p1Balls = ["p1red","p1black","p1pink","p1blue","p1brown","p1green","p1yellow"];
     var p2Balls = ["p2red","p2black","p2pink","p2blue","p2brown","p2green","p2yellow"];
-    p1Balls.forEach(function(id) { document.getElementById(id).disabled = !isP1; });
-    p2Balls.forEach(function(id) { document.getElementById(id).disabled =  isP1; });
+    p1Balls.forEach(function(id) { document.getElementById(id).disabled = frameOver || !isP1; });
+    p2Balls.forEach(function(id) { document.getElementById(id).disabled = frameOver ||  isP1; });
+
+    [4, 5, 6, 7].forEach(function(points) {
+        document.getElementById("p1foul" + points).disabled = frameOver || !isP1;
+        document.getElementById("p2foul" + points).disabled = frameOver || isP1;
+    });
+    document.getElementById("btn-switch").disabled = frameOver;
+    var nextFrameButtons = document.getElementsByClassName("BUTTON_RESET");
+    for (var i = 0; i < nextFrameButtons.length; i++) nextFrameButtons[i].disabled = !frameOver;
+
+    if (frameOver) return;
 
     var activePrefix = isP1 ? "p1" : "p2";
     var colorButtons = ["black","pink","blue","brown","green","yellow"];
 
-    if (redcount > 0) {
-        document.getElementById(activePrefix + "red").disabled = colorPending;
+    if (gamePhase === PHASE_REDS) {
+        document.getElementById(activePrefix + "red").disabled = false;
         colorButtons.forEach(function(color) {
-            document.getElementById(activePrefix + color).disabled = !colorPending;
+            document.getElementById(activePrefix + color).disabled = true;
         });
-    } else if (colorPending) {
+    } else if (gamePhase === PHASE_COLOR_AFTER_RED) {
         document.getElementById(activePrefix + "red").disabled = true;
         colorButtons.forEach(function(color) {
             document.getElementById(activePrefix + color).disabled = false;
         });
-    } else if (redcount === 0) {
+    } else if (gamePhase === PHASE_COLORS) {
         var colorSequence = {27: "yellow", 25: "green", 22: "brown", 18: "blue", 13: "pink", 7: "black"};
         var nextColor = colorSequence[colorsRemaining];
-        var prefix = isP1 ? "p1" : "p2";
         ["red","black","pink","blue","brown","green","yellow"].forEach(function(color) {
-            document.getElementById(prefix + color).disabled = (color !== nextColor);
+            document.getElementById(activePrefix + color).disabled = (color !== nextColor);
+        });
+    } else if (gamePhase === PHASE_RESPOTTED_BLACK) {
+        ["red","black","pink","blue","brown","green","yellow"].forEach(function(color) {
+            document.getElementById(activePrefix + color).disabled = color !== "black";
         });
     }
 }
@@ -486,9 +491,14 @@ function AheadCount(p1point, p2point) {
 }
 
 function Remaining() {
-    var pendingColorMax = colorPending ? BLACK : 0;
-    if (redcount > 0) return (redcount * (RED + BLACK)) + colorsRemaining + pendingColorMax;
-    return colorsRemaining + pendingColorMax;
+    if (gamePhase === PHASE_FRAME_OVER) return 0;
+    if (gamePhase === PHASE_RESPOTTED_BLACK) return BLACK;
+
+    var pendingColorMax = gamePhase === PHASE_COLOR_AFTER_RED ? BLACK : 0;
+    if (gamePhase === PHASE_REDS || gamePhase === PHASE_COLOR_AFTER_RED) {
+        return (redcount * (RED + BLACK)) + colorsRemaining + pendingColorMax;
+    }
+    return colorsRemaining;
 }
 
 
