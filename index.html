@@ -10,9 +10,18 @@
     <div class="container">
         <div class="row language-row">
           <div class="col-12">
-            <div class="language-switch" aria-label="Language">
-              <input type="button" class="BUTTON_LANG" id="lang-cs" onclick="SetLanguage('cs');" value="CZ" />
-              <input type="button" class="BUTTON_LANG" id="lang-en" onclick="SetLanguage('en');" value="EN" />
+            <div class="scoreboard-toolbar">
+              <div class="frame-starter-control">
+                <label id="frame-starter-label" for="frame-starter">Break-off</label>
+                <select id="frame-starter" onchange="SetFrameStarter(this.value);">
+                  <option value="p1">Player 1</option>
+                  <option value="p2">Player 2</option>
+                </select>
+              </div>
+              <div class="language-switch" aria-label="Language">
+                <input type="button" class="BUTTON_LANG" id="lang-cs" onclick="SetLanguage('cs');" value="CZ" />
+                <input type="button" class="BUTTON_LANG" id="lang-en" onclick="SetLanguage('en');" value="EN" />
+              </div>
             </div>
           </div>
         </div>
@@ -22,7 +31,7 @@
               <div class="frame-score" id="p1-frames">0</div>
               <div class="frame-score-label">frames</div>
             </div>
-            <input type="text" class="player-name-input" id="p1-name" value="Player 1" />
+            <input type="text" class="player-name-input" id="p1-name" value="Player 1" oninput="UpdateFrameStarterUI();" />
             <h3 class="center" id="p1points">Points: 0</h3>
             <h3 class="center" id="p1break">Break: 0</h3>
             <div class="red-buttons">
@@ -48,7 +57,7 @@
               <div class="frame-score" id="p2-frames">0</div>
               <div class="frame-score-label">frames</div>
             </div>
-            <input type="text" class="player-name-input" id="p2-name" value="Player 2" />
+            <input type="text" class="player-name-input" id="p2-name" value="Player 2" oninput="UpdateFrameStarterUI();" />
             <h3 class="center" id="p2points">Points: 0</h3>
             <h3 class="center" id="p2break">Break: 0</h3>
             <div class="red-buttons">

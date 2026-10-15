@@ -16,6 +16,7 @@ var gamePhase = PHASE_REDS;
 
 var currentPlayer = "p1";
 var frameStarter = "p1";
+var frameStarted = false;
 var playAgainAvailable = false;
 var freeBallAvailable = false;
 var foulOffender = null;
@@ -106,6 +107,7 @@ function ApplyLanguage() {
 
     SetValue("lang-cs", T("languageCs"));
     SetValue("lang-en", T("languageEn"));
+    SetText("frame-starter-label", T("frameStarter"));
     document.getElementById("lang-cs").className = "BUTTON_LANG" + (currentLanguage === "cs" ? " active-language" : "");
     document.getElementById("lang-en").className = "BUTTON_LANG" + (currentLanguage === "en" ? " active-language" : "");
 
@@ -169,6 +171,7 @@ function saveState() {
         gamePhase:       gamePhase,
         currentPlayer:   currentPlayer,
         frameStarter:    frameStarter,
+        frameStarted:    frameStarted,
         playAgainAvailable: playAgainAvailable,
         freeBallAvailable: freeBallAvailable,
         foulOffender:    foulOffender,
@@ -188,6 +191,7 @@ function Undo() {
     gamePhase        = state.gamePhase;
     currentPlayer   = state.currentPlayer;
     frameStarter    = state.frameStarter;
+    frameStarted    = state.frameStarted;
     playAgainAvailable = state.playAgainAvailable;
     freeBallAvailable = state.freeBallAvailable;
     foulOffender    = state.foulOffender;
@@ -207,6 +211,7 @@ function Red(player, count) {
     if (player !== currentPlayer || gamePhase !== PHASE_REDS || redcount <= 0) return;
     if (!Number.isInteger(count) || count < 1 || count > redcount) return;
     saveState();
+    frameStarted = true;
     ClearFoulOptions();
     if (player === "p1"){
         p2break = 0;
@@ -314,6 +319,7 @@ function UpdatePhaseAfterColor(value) {
 function PotColor(player, value) {
     if (!CanPotColor(player, value)) return;
     saveState();
+    frameStarted = true;
     ClearFoulOptions();
     if (player === "p1"){
         p2break = 0;
@@ -376,6 +382,7 @@ function CanApplyFoul(player, points) {
 function applyFoul(player, points) {
     if (!CanApplyFoul(player, points)) return;
     saveState();
+    frameStarted = true;
     ClearFoulOptions();
     // Keep only the table position: replaying a miss must retain penalty points.
     var originalPosition = {
@@ -444,11 +451,33 @@ function ReplayMiss() {
     RefreshUI();
 }
 
+function CanSelectFrameStarter() {
+    return !frameStarted && p1frames === 0 && p2frames === 0;
+}
+
+function SetFrameStarter(player) {
+    if (!CanSelectFrameStarter() || (player !== "p1" && player !== "p2") ||
+        player === frameStarter) return;
+    saveState();
+    frameStarter = player;
+    currentPlayer = player;
+    RefreshUI();
+}
+
+function UpdateFrameStarterUI() {
+    var selector = document.getElementById("frame-starter");
+    ["p1", "p2"].forEach(function(player, index) {
+        selector.options[index].textContent = document.getElementById(player + "-name").value.trim() || T("player" + (index + 1));
+    });
+    selector.value = frameStarter;
+    selector.disabled = !CanSelectFrameStarter();
+    selector.title = T(selector.disabled ? "frameStarterLocked" : "selectFirstStarter");
+}
+
 function TogglePlayer() {
     if (gamePhase === PHASE_FRAME_OVER) return;
-    var selectingFrameStarter = gamePhase === PHASE_REDS && redcount === 15 &&
-        p1point === 0 && p2point === 0;
     saveState();
+    frameStarted = true;
     ClearFoulOptions();
     if (currentPlayer === "p1") {
         p1break = 0;
@@ -457,7 +486,6 @@ function TogglePlayer() {
         p2break = 0;
         currentPlayer = "p1";
     }
-    if (selectingFrameStarter) frameStarter = currentPlayer;
     if (gamePhase === PHASE_COLOR_AFTER_RED) {
         gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
     }
@@ -486,6 +514,7 @@ function NextFrame() {
 
 function Reset(advanceStarter) {
     if (advanceStarter) frameStarter = frameStarter === "p1" ? "p2" : "p1";
+    frameStarted = false;
     undoStack = [];
     p1point = 0;
     p1break = 0;
@@ -559,6 +588,7 @@ function RefreshUI() {
     var f1 = document.getElementById("p1-frames"); if (f1) f1.innerText = p1frames;
     var f2 = document.getElementById("p2-frames"); if (f2) f2.innerText = p2frames;
     document.getElementById("btn-undo").disabled = undoStack.length === 0;
+    UpdateFrameStarterUI();
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
 }

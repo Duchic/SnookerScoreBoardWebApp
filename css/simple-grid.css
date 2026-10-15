@@ -1062,6 +1062,43 @@ h5 {
   gap: 4px;
 }
 
+.scoreboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.scoreboard-toolbar .language-switch { flex-shrink: 0; }
+
+.frame-starter-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.75rem;
+}
+
+.frame-starter-control label { flex-shrink: 0; }
+
+#frame-starter {
+  min-width: 0;
+  max-width: 220px;
+  height: 28px;
+  border: 1px solid #999;
+  border-radius: 6px;
+  background: #fff;
+  color: #333447;
+  font-size: 0.75rem;
+}
+
+#frame-starter:disabled {
+  opacity: 1;
+  background: #f2f2f2;
+  color: #555;
+  -webkit-text-fill-color: #555;
+}
+
 .BUTTON_LANG {
   min-width: 38px;
   height: 24px;
