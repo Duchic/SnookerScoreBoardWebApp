@@ -300,8 +300,18 @@ function FreeBall() {
     RefreshUI();
 }
 
+function CanApplyFoul(player, points) {
+    if (player !== currentPlayer || gamePhase === PHASE_FRAME_OVER) return false;
+    if ([BROWN, BLUE, PINK, BLACK].indexOf(points) === -1) return false;
+
+    var minimum = BROWN;
+    if (gamePhase === PHASE_COLORS) minimum = Math.max(BROWN, GetNextColorValue());
+    if (gamePhase === PHASE_RESPOTTED_BLACK) minimum = BLACK;
+    return points >= minimum;
+}
+
 function applyFoul(player, points) {
-    if (player !== currentPlayer || gamePhase === PHASE_FRAME_OVER) return;
+    if (!CanApplyFoul(player, points)) return;
     saveState();
     ClearFoulOptions();
     if (player === "p1") {
@@ -482,8 +492,8 @@ function UpdateActivePlayer() {
     p2Balls.forEach(function(id) { document.getElementById(id).disabled = frameOver ||  isP1; });
 
     [4, 5, 6, 7].forEach(function(points) {
-        document.getElementById("p1foul" + points).disabled = frameOver || !isP1;
-        document.getElementById("p2foul" + points).disabled = frameOver || isP1;
+        document.getElementById("p1foul" + points).disabled = !CanApplyFoul("p1", points);
+        document.getElementById("p2foul" + points).disabled = !CanApplyFoul("p2", points);
     });
     document.getElementById("btn-switch").disabled = frameOver;
     var playAgainButton = document.getElementById("btn-play-again");
