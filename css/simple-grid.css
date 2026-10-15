@@ -1081,6 +1081,62 @@ h5 {
   border-color: #333447;
 }
 
+.red-buttons {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.red-buttons .BUTTON_RED {
+  flex: 1;
+  min-width: 0;
+}
+
+.BUTTON_MORE_REDS {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid #aa0000;
+  border-radius: 14px;
+  background: #fff0f0;
+  color: #8c0000;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.foul-decision-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.BUTTON_FOUL_DECISION {
+  min-height: 36px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 17px;
+  background: #4b5563;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+#ball-count-dialog {
+  box-sizing: border-box;
+  width: min(420px, calc(100% - 32px));
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+}
+
+#ball-count-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+#ball-count-title { font-size: 1.2rem; margin: 0 0 12px; }
+#ball-count-help { font-size: 0.95rem; font-weight: 400; line-height: 1.5; }
+#ball-count-label { display: block; margin-bottom: 4px; }
+#ball-count { box-sizing: border-box; width: 100%; padding: 8px; font-size: 1rem; }
+.ball-count-actions { display: flex; gap: 8px; margin-top: 20px; }
+.ball-count-actions button { flex: 1; min-height: 44px; border: 1px solid #777; border-radius: 8px; cursor: pointer; }
+#ball-count-confirm { background: #176b3a; color: white; border-color: #176b3a; }
+
 /* === TOUCH / MOBILE === */
 
 input[type="button"] {

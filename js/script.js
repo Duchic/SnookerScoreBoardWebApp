@@ -19,6 +19,8 @@ var frameStarter = "p1";
 var playAgainAvailable = false;
 var freeBallAvailable = false;
 var foulOffender = null;
+var foulPosition = null;
+var ballCountAction = null;
 
 var p1frames = 0;
 var p2frames = 0;
@@ -129,6 +131,15 @@ function ApplyLanguage() {
 
     SetValueByClass("BUTTON_SWITCH", T("switchPlayer"));
     SetValue("btn-play-again", T("playAgain"));
+    SetValueByClass("BUTTON_MORE_REDS", T("moreReds"));
+    SetText("btn-replay-miss", T("replayMiss"));
+    SetText("btn-foul-reds", T("foulReds"));
+    SetText("ball-count-label", T("redCount"));
+    SetText("ball-count-cancel", T("cancel"));
+    SetText("ball-count-confirm", T("confirm"));
+    ["p1", "p2"].forEach(function(player) {
+        document.getElementById(player + "more-reds").setAttribute("aria-label", T("multipleReds"));
+    });
     SetValue("btn-free-ball", T("freeBall"));
     SetValue("btn-undo", T("undo"));
     SetValueByClass("BUTTON_RESET", T("nextFrame"));
@@ -160,7 +171,8 @@ function saveState() {
         frameStarter:    frameStarter,
         playAgainAvailable: playAgainAvailable,
         freeBallAvailable: freeBallAvailable,
-        foulOffender:    foulOffender
+        foulOffender:    foulOffender,
+        foulPosition:   foulPosition
     });
 }
 
@@ -179,6 +191,7 @@ function Undo() {
     playAgainAvailable = state.playAgainAvailable;
     freeBallAvailable = state.freeBallAvailable;
     foulOffender    = state.foulOffender;
+    foulPosition    = state.foulPosition;
     RefreshUI();
 }
 
@@ -186,23 +199,73 @@ function ClearFoulOptions() {
     playAgainAvailable = false;
     freeBallAvailable = false;
     foulOffender = null;
+    foulPosition = null;
 }
 
-function Red(player) {
+function Red(player, count) {
+    if (count === undefined) count = 1;
     if (player !== currentPlayer || gamePhase !== PHASE_REDS || redcount <= 0) return;
+    if (!Number.isInteger(count) || count < 1 || count > redcount) return;
     saveState();
     ClearFoulOptions();
     if (player === "p1"){
         p2break = 0;
-        p1break += RED;
-        p1point += RED;
+        p1break += count * RED;
+        p1point += count * RED;
     } else {
         p1break = 0;
-        p2point += RED;
-        p2break += RED;
+        p2point += count * RED;
+        p2break += count * RED;
     }
-    redcount--;
+    redcount -= count;
     gamePhase = PHASE_COLOR_AFTER_RED;
+    RefreshUI();
+}
+
+function CanAdjustFoulReds() {
+    return playAgainAvailable && foulPosition && foulPosition.redcount > 0 &&
+        currentPlayer !== foulOffender && gamePhase !== PHASE_FRAME_OVER;
+}
+
+function OpenBallCount(mode, player) {
+    if (mode === "reds") {
+        if (player !== currentPlayer || gamePhase !== PHASE_REDS || redcount < 2) return;
+    } else if (mode !== "foul" || !CanAdjustFoulReds()) {
+        return;
+    }
+    ballCountAction = { mode: mode, player: player };
+    var input = document.getElementById("ball-count");
+    input.min = mode === "reds" ? 1 : 0;
+    input.max = mode === "reds" ? redcount : foulPosition.redcount;
+    input.value = mode === "reds" ? 2 : foulPosition.redcount - redcount;
+    input.setCustomValidity("");
+    SetText("ball-count-title", T(mode === "reds" ? "multipleReds" : "foulReds"));
+    SetText("ball-count-help", T(mode === "reds" ? "multipleRedsHelp" : "foulRedsHelp"));
+    document.getElementById("ball-count-dialog").showModal();
+    input.focus();
+    input.select();
+}
+
+function SubmitBallCount(event) {
+    event.preventDefault();
+    var input = document.getElementById("ball-count");
+    if (!ballCountAction || !input.reportValidity()) return;
+    var count = Number(input.value);
+    if (!Number.isInteger(count)) return;
+    var action = ballCountAction;
+    document.getElementById("ball-count-dialog").close();
+    ballCountAction = null;
+    if (action.mode === "reds") Red(action.player, count);
+    else SetFoulReds(count);
+}
+
+function SetFoulReds(count) {
+    if (!CanAdjustFoulReds() || !Number.isInteger(count) || count < 0 ||
+        count > foulPosition.redcount || count === foulPosition.redcount - redcount) return;
+    saveState();
+    redcount = foulPosition.redcount - count;
+    gamePhase = redcount > 0 ? PHASE_REDS : PHASE_COLORS;
+    freeBallAvailable = GetFreeBallValue() > 0;
     RefreshUI();
 }
 
@@ -314,6 +377,12 @@ function applyFoul(player, points) {
     if (!CanApplyFoul(player, points)) return;
     saveState();
     ClearFoulOptions();
+    // Keep only the table position: replaying a miss must retain penalty points.
+    var originalPosition = {
+        redcount: redcount,
+        colorsRemaining: colorsRemaining,
+        gamePhase: gamePhase
+    };
     if (player === "p1") {
         p1break = 0;
         p2point += points;
@@ -341,6 +410,7 @@ function applyFoul(player, points) {
         playAgainAvailable = true;
         freeBallAvailable = GetFreeBallValue() > 0;
         foulOffender = player;
+        foulPosition = originalPosition;
     }
     RefreshUI();
 }
@@ -354,6 +424,20 @@ function PlayAgain() {
     if (!playAgainAvailable || !foulOffender || gamePhase === PHASE_FRAME_OVER) return;
     saveState();
     currentPlayer = foulOffender;
+    p1break = 0;
+    p2break = 0;
+    ClearFoulOptions();
+    RefreshUI();
+}
+
+function ReplayMiss() {
+    if (!playAgainAvailable || !foulOffender || !foulPosition ||
+        gamePhase === PHASE_FRAME_OVER || gamePhase === PHASE_RESPOTTED_BLACK) return;
+    saveState();
+    currentPlayer = foulOffender;
+    redcount = foulPosition.redcount;
+    colorsRemaining = foulPosition.colorsRemaining;
+    gamePhase = foulPosition.gamePhase;
     p1break = 0;
     p2break = 0;
     ClearFoulOptions();
@@ -495,10 +579,21 @@ function UpdateActivePlayer() {
         document.getElementById("p1foul" + points).disabled = !CanApplyFoul("p1", points);
         document.getElementById("p2foul" + points).disabled = !CanApplyFoul("p2", points);
     });
+    ["p1", "p2"].forEach(function(player) {
+        document.getElementById(player + "more-reds").disabled =
+            player !== currentPlayer || gamePhase !== PHASE_REDS || redcount < 2;
+    });
     document.getElementById("btn-switch").disabled = frameOver;
     var playAgainButton = document.getElementById("btn-play-again");
     playAgainButton.disabled = !playAgainAvailable || frameOver;
     playAgainButton.style.display = playAgainAvailable && !frameOver ? "" : "none";
+    var replayMissButton = document.getElementById("btn-replay-miss");
+    replayMissButton.disabled = !playAgainAvailable || !foulPosition || frameOver;
+    replayMissButton.style.display = replayMissButton.disabled ? "none" : "";
+    var foulRedsButton = document.getElementById("btn-foul-reds");
+    foulRedsButton.disabled = !CanAdjustFoulReds();
+    foulRedsButton.style.display = foulRedsButton.disabled ? "none" : "";
+    foulRedsButton.innerText = T("foulReds") + (foulPosition ? ": " + (foulPosition.redcount - redcount) : "");
     var freeBallButton = document.getElementById("btn-free-ball");
     var freeBallValue = GetFreeBallValue();
     freeBallButton.value = freeBallValue > 0 ? TPoints("freeBallWithPoints", freeBallValue) : T("freeBall");
