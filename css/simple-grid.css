@@ -1071,6 +1071,18 @@ h5 {
 
 .scoreboard-toolbar .language-switch { flex-shrink: 0; }
 
+.storage-notice {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border: 1px solid #b96d00;
+  border-radius: 6px;
+  background: #fff5df;
+  color: #633900;
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 .frame-starter-control {
   display: flex;
   align-items: center;

@@ -160,8 +160,8 @@ function SetValueByClass(className, value) {
     for (var i = 0; i < elements.length; i++) elements[i].value = value;
 }
 
-function saveState() {
-    undoStack.push({
+function GetGameState() {
+    return {
         p1point:         p1point,
         p1break:         p1break,
         p2point:         p2point,
@@ -176,12 +176,14 @@ function saveState() {
         freeBallAvailable: freeBallAvailable,
         foulOffender:    foulOffender,
         foulPosition:   foulPosition
-    });
+    };
 }
 
-function Undo() {
-    if (undoStack.length === 0) return;
-    var state = undoStack.pop();
+function saveState() {
+    undoStack.push(GetGameState());
+}
+
+function RestoreGameState(state) {
     p1point         = state.p1point;
     p1break         = state.p1break;
     p2point         = state.p2point;
@@ -196,6 +198,11 @@ function Undo() {
     freeBallAvailable = state.freeBallAvailable;
     foulOffender    = state.foulOffender;
     foulPosition    = state.foulPosition;
+}
+
+function Undo() {
+    if (undoStack.length === 0) return;
+    RestoreGameState(undoStack.pop());
     RefreshUI();
 }
 
@@ -474,6 +481,11 @@ function UpdateFrameStarterUI() {
     selector.title = T(selector.disabled ? "frameStarterLocked" : "selectFirstStarter");
 }
 
+function PlayerNameChanged() {
+    UpdateFrameStarterUI();
+    PersistMatch();
+}
+
 function TogglePlayer() {
     if (gamePhase === PHASE_FRAME_OVER) return;
     saveState();
@@ -529,6 +541,8 @@ function Reset(advanceStarter) {
 }
 
 function ResetMatch() {
+    if (!confirm(T("confirmNewMatch"))) return;
+    matchStorageBlocked = false;
     p1frames = 0;
     p2frames = 0;
     frameStarter = "p1";
@@ -591,6 +605,7 @@ function RefreshUI() {
     UpdateFrameStarterUI();
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
+    PersistMatch();
 }
 
 function UpdateActivePlayer() {
@@ -785,5 +800,6 @@ function Remaining() {
 }
 
 
+RestoreMatch();
 ApplyLanguage();
 RefreshUI();

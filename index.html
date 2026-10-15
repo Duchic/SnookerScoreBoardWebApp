@@ -23,6 +23,7 @@
                 <input type="button" class="BUTTON_LANG" id="lang-en" onclick="SetLanguage('en');" value="EN" />
               </div>
             </div>
+            <p id="match-storage-notice" class="storage-notice" role="status" hidden></p>
           </div>
         </div>
         <div class="row players-row">
@@ -31,7 +32,7 @@
               <div class="frame-score" id="p1-frames">0</div>
               <div class="frame-score-label">frames</div>
             </div>
-            <input type="text" class="player-name-input" id="p1-name" value="Player 1" oninput="UpdateFrameStarterUI();" />
+            <input type="text" class="player-name-input" id="p1-name" value="Player 1" oninput="PlayerNameChanged();" />
             <h3 class="center" id="p1points">Points: 0</h3>
             <h3 class="center" id="p1break">Break: 0</h3>
             <div class="red-buttons">
@@ -57,7 +58,7 @@
               <div class="frame-score" id="p2-frames">0</div>
               <div class="frame-score-label">frames</div>
             </div>
-            <input type="text" class="player-name-input" id="p2-name" value="Player 2" oninput="UpdateFrameStarterUI();" />
+            <input type="text" class="player-name-input" id="p2-name" value="Player 2" oninput="PlayerNameChanged();" />
             <h3 class="center" id="p2points">Points: 0</h3>
             <h3 class="center" id="p2break">Break: 0</h3>
             <div class="red-buttons">
@@ -160,6 +161,7 @@
         </form>
       </dialog>
       <script src="js/i18n.js" type="text/javascript"></script>
+      <script src="js/match-storage.js" type="text/javascript"></script>
       <script src="js/script.js" type="text/javascript"></script>
 </body>
 </html>
