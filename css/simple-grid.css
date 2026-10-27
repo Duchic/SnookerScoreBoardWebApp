@@ -911,6 +911,34 @@ input[type="button"]:disabled {
 
 /* === COMPACT SCOREBOARD LAYOUT === */
 
+.row[hidden], .BUTTON_WIN_FRAME[hidden] {
+  display: none;
+}
+
+.frame-result-panel {
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #247443;
+  border-radius: 8px;
+  background: #edf7f0;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.frame-result-panel h2 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.frame-result-panel p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+#frame-result-winner { font-weight: 700; }
+#frame-result-help { font-size: 0.8rem; }
+
 .container {
   padding-top: 4px;
   padding-bottom: 4px;

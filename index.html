@@ -26,6 +26,14 @@
             <p id="match-storage-notice" class="storage-notice" role="status" hidden></p>
           </div>
         </div>
+        <div class="row" id="frame-result" role="status" hidden>
+          <div class="col-12 frame-result-panel">
+            <h2 id="frame-result-title"></h2>
+            <p id="frame-result-winner"></p>
+            <p id="frame-result-score"></p>
+            <p id="frame-result-help"></p>
+          </div>
+        </div>
         <div class="row players-row">
           <div class="col-6">
             <div class="frame-score-container">
@@ -98,7 +106,7 @@
             </div>
           </div>
         </div>
-        <div class="row stats-row">
+        <div class="row stats-row" id="live-stats">
           <div class="col-3">
             <h5 class="center" id="ahead_lbl">Tied</h5>
             <h5 class="center" id="ahead">0</h5>
@@ -116,7 +124,7 @@
             <h5 class="center" id="toWin">0</h5>
           </div>
         </div>
-        <div class="row">
+        <div class="row" id="live-progress">
           <div class="col-12">
             <div class="progress-section">
               <div class="progress-bar-label" id="bar-player-label">P1</div>

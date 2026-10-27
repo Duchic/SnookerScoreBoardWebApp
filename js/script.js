@@ -483,6 +483,7 @@ function UpdateFrameStarterUI() {
 
 function PlayerNameChanged() {
     UpdateFrameStarterUI();
+    UpdateFrameResultUI();
     PersistMatch();
 }
 
@@ -505,6 +506,7 @@ function TogglePlayer() {
 }
 
 function WinFrame(player) {
+    if (gamePhase === PHASE_FRAME_OVER || (player !== "p1" && player !== "p2")) return;
     if (player === "p1") p1frames++;
     else                 p2frames++;
     Reset(true);
@@ -547,6 +549,22 @@ function ResetMatch() {
     p2frames = 0;
     frameStarter = "p1";
     Reset(false);
+}
+
+function UpdateFrameResultUI() {
+    var frameOver = gamePhase === PHASE_FRAME_OVER;
+    document.getElementById("frame-result").hidden = !frameOver;
+    document.getElementById("live-stats").hidden = frameOver;
+    document.getElementById("live-progress").hidden = frameOver;
+    if (!frameOver) return;
+
+    var winner = p1point > p2point ? "p1" : p2point > p1point ? "p2" : null;
+    var name = winner ? document.getElementById(winner + "-name").value.trim() ||
+        T(winner === "p1" ? "player1" : "player2") : "";
+    SetText("frame-result-title", T("frameFinished"));
+    SetText("frame-result-winner", winner ? T("frameWinner").replace("{player}", function() { return name; }) : T("tied"));
+    SetText("frame-result-score", T("finalScore").replace("{score}", p1point + " : " + p2point));
+    SetText("frame-result-help", T("frameFinishedHelp"));
 }
 
 function RefreshUI() {
@@ -603,6 +621,7 @@ function RefreshUI() {
     var f2 = document.getElementById("p2-frames"); if (f2) f2.innerText = p2frames;
     document.getElementById("btn-undo").disabled = undoStack.length === 0;
     UpdateFrameStarterUI();
+    UpdateFrameResultUI();
     UpdateActivePlayer();
     UpdateProgressBars(remaining);
     PersistMatch();
@@ -612,8 +631,13 @@ function UpdateActivePlayer() {
     var isP1 = currentPlayer === "p1";
     var frameOver = gamePhase === PHASE_FRAME_OVER;
 
-    document.getElementById("p1-name").className = "player-name-input " + (isP1 ? "active-player-name" : "inactive-player-name");
-    document.getElementById("p2-name").className = "player-name-input " + (isP1 ? "inactive-player-name" : "active-player-name");
+    document.getElementById("p1-name").className = "player-name-input " + (!frameOver && isP1 ? "active-player-name" : "inactive-player-name");
+    document.getElementById("p2-name").className = "player-name-input " + (!frameOver && !isP1 ? "active-player-name" : "inactive-player-name");
+    var winButtons = document.getElementsByClassName("BUTTON_WIN_FRAME");
+    for (var w = 0; w < winButtons.length; w++) {
+        winButtons[w].disabled = frameOver;
+        winButtons[w].hidden = frameOver;
+    }
 
     var p1Balls = ["p1red","p1black","p1pink","p1blue","p1brown","p1green","p1yellow"];
     var p2Balls = ["p2red","p2black","p2pink","p2blue","p2brown","p2green","p2yellow"];
