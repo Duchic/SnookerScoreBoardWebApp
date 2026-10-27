@@ -262,7 +262,7 @@ p {
   font-weight: 100;
   padding: 2px;
   margin-bottom: 8px;
-  background-color: #F50000;
+  background-color: #c90000;
   -webkit-box-shadow: 1px 1px 20px 0 #000000;
   -moz-box-shadow: 1px 1px 20px 0 #000000;
   box-shadow: 1px 1px 20px 0 #000000;
@@ -273,8 +273,8 @@ p {
 }
 
 .BUTTON_RED:hover {
-  background: #FF0000;
-  border: solid #FF0000 1px;
+  background: #ac0000;
+  border: solid #ac0000 1px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -415,7 +415,7 @@ p {
   border-radius: 20px;
   height: 40px;
   line-height: 20px;
-  color: #FFFFFF;
+  color: #222222;
   font-family: Arial;
   width: 100%;
   font-size: 30px;
@@ -486,7 +486,7 @@ p {
   font-weight: 100;
   padding: 2px;
   margin-bottom: 8px;
-  background-color: #7c7979;
+  background-color: #626262;
   -webkit-box-shadow: 1px 1px 20px 0 #7c7979;
   -moz-box-shadow: 1px 1px 20px 0 #7c7979;
   box-shadow: 1px 1px 20px 0 #7c7979;
@@ -497,8 +497,8 @@ p {
 }
 
 .BUTTON_FOUL:hover {
-  background: #7c7979;
-  border: solid #7c7979 1px;
+  background: #505050;
+  border: solid #505050 1px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -551,13 +551,16 @@ p {
 
 .frame-score-label {
   font-size: 0.65rem;
-  color: #999;
+  color: #626262;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 input[type="button"]:disabled {
-  opacity: 0.35;
+  opacity: 1;
+  color: #505866;
+  background: #e9edf2;
+  border: 1px solid #b9c1cc;
   cursor: default !important;
   box-shadow: none !important;
   text-shadow: none !important;
@@ -581,19 +584,17 @@ input[type="button"]:disabled {
 }
 
 .player-name-input:focus {
-  outline: none;
   cursor: text;
 }
 
 .active-player-name {
-  color: #e8a000;
-  text-shadow: 0 0 10px rgba(232, 160, 0, 0.5);
+  color: #895700;
   border-bottom: 3px solid #e8a000;
   padding-bottom: 2px;
 }
 
 .inactive-player-name {
-  color: #999999;
+  color: #626273;
   text-shadow: none;
   border-bottom: none;
 }
@@ -670,7 +671,7 @@ input[type="button"]:disabled {
   transform: translateX(-50%);
   font-size: 0.72rem;
   font-weight: bold;
-  color: #ff8800;
+  color: #944600;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -787,10 +788,8 @@ input[type="button"]:disabled {
 }
 
 .BUTTON_UNDO:disabled {
-  background-color: #c8b89a;
   box-shadow: none;
   cursor: default;
-  opacity: 0.6;
 }
 
 .foul-decision-buttons {
@@ -841,7 +840,7 @@ input[type="button"]:disabled {
   font-weight: 100;
   padding: 2px;
   margin-bottom: 8px;
-  background-color: #a07800;
+  background-color: #795900;
   -webkit-box-shadow: 1px 1px 20px 0 #000000;
   -moz-box-shadow: 1px 1px 20px 0 #000000;
   box-shadow: 1px 1px 20px 0 #000000;
@@ -921,6 +920,28 @@ input[type="button"]:disabled {
 }
 
 /* === COMPACT SCOREBOARD LAYOUT === */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+input[type="button"], button {
+  text-shadow: none;
+}
+
+input:focus-visible, button:focus-visible, select:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff;
+}
 
 .row[hidden], .BUTTON_WIN_FRAME[hidden] {
   display: none;

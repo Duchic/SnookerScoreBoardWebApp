@@ -113,6 +113,8 @@ function ApplyLanguage() {
 
     SetPlayerDefaultName("p1-name", "player1");
     SetPlayerDefaultName("p2-name", "player2");
+    SetText("p1-name-label", T("player1Name"));
+    SetText("p2-name-label", T("player2Name"));
 
     var colors = ["red", "black", "pink", "blue", "brown", "green", "yellow"];
     colors.forEach(function(color) {
