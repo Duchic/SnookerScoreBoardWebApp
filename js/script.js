@@ -700,11 +700,12 @@ function UpdateActivePlayer() {
 }
 
 function UpdateProgressBars(remaining) {
-    var scale = 147;
     var isP1 = currentPlayer === "p1";
 
     var myScore  = isP1 ? p1point : p2point;
     var oppScore = isP1 ? p2point : p1point;
+    var maxVal = myScore + remaining;
+    var scale = Math.max(147, maxVal, oppScore);
     var currentColor   = isP1 ? "#1155cc" : "#cc2200";
     var potentialColor = isP1 ? "#99bbf0" : "#f0a090";
 
@@ -720,14 +721,14 @@ function UpdateProgressBars(remaining) {
     document.getElementById("bar-potential").style.width = potentialPct + "%";
 
     var scoreLabelEl = document.getElementById("bar-score-label");
-    scoreLabelEl.style.left  = currentPct + "%";
+    scoreLabelEl.dataset.position = currentPct;
     scoreLabelEl.style.color = currentColor;
-    scoreLabelEl.innerText   = myScore > 0 ? myScore : "";
+    // A shared endpoint needs only one label.
+    scoreLabelEl.innerText   = myScore > 0 && myScore !== maxVal ? myScore : "";
 
-    var maxVal     = myScore + remaining;
     var maxPct     = clampPct(maxVal / scale * 100);
     var maxLabelEl = document.getElementById("bar-max-label");
-    maxLabelEl.style.left  = maxPct + "%";
+    maxLabelEl.dataset.position = maxPct;
     maxLabelEl.style.color = currentColor;
     maxLabelEl.innerText   = maxVal;
 
@@ -745,10 +746,40 @@ function UpdateProgressBars(remaining) {
         var markerPct = clampPct(snookerTarget.score / scale * 100);
         markerEl.style.display = "";
         markerEl.style.left = markerPct + "%";
+        document.getElementById("bar-marker-label").dataset.position = markerPct;
         document.getElementById("bar-marker-label").innerText = snookerTarget.score;
     } else {
         markerEl.style.display = "none";
         document.getElementById("bar-marker-label").innerText = "";
+    }
+    LayoutProgressLabels();
+}
+
+function LayoutProgressLabels() {
+    var container = document.querySelector(".progress-bar-container");
+    var width = container.clientWidth;
+    if (!width) return;
+
+    // Keep the whole number inside the bar, including at either endpoint.
+    function place(id) {
+        var label = document.getElementById(id);
+        var halfWidth = label.getBoundingClientRect().width / 2;
+        var center = Math.max(halfWidth, Math.min(width - halfWidth,
+            width * Number(label.dataset.position || 0) / 100));
+        label.style.left = center + "px";
+        return { element: label, center: center, halfWidth: halfWidth };
+    }
+
+    var score = place("bar-score-label");
+    var maximum = place("bar-max-label");
+    place("bar-marker-label");
+    var gap = 8;
+    if (score.element.textContent && score.center + score.halfWidth + gap > maximum.center - maximum.halfWidth) {
+        score.center = Math.max(score.halfWidth, maximum.center - maximum.halfWidth - gap - score.halfWidth);
+        maximum.center = Math.min(width - maximum.halfWidth,
+            Math.max(maximum.center, score.center + score.halfWidth + gap + maximum.halfWidth));
+        score.element.style.left = score.center + "px";
+        maximum.element.style.left = maximum.center + "px";
     }
 }
 
@@ -827,3 +858,8 @@ function Remaining() {
 RestoreMatch();
 ApplyLanguage();
 RefreshUI();
+
+// Re-measure after resizing or loading the web font, without changing game state.
+var progressResizeObserver = new ResizeObserver(LayoutProgressLabels);
+progressResizeObserver.observe(document.querySelector(".progress-bar-container"));
+document.fonts.ready.then(LayoutProgressLabels);

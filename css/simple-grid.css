@@ -616,6 +616,7 @@ input[type="button"]:disabled {
 .progress-bar-container {
   position: relative;
   flex: 1;
+  min-width: 0;
   height: 38px;
 }
 
@@ -653,7 +654,7 @@ input[type="button"]:disabled {
 
 .marker-label {
   position: absolute;
-  bottom: calc(100% + 3px);
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.72rem;
@@ -671,7 +672,6 @@ input[type="button"]:disabled {
   font-weight: bold;
   white-space: nowrap;
   pointer-events: none;
-  transition: left 0.35s ease;
 }
 
 .progress-legend {
@@ -1041,7 +1041,7 @@ h5 {
 }
 
 .progress-bar-container {
-  height: 50px;
+  height: 56px;
 }
 
 .progress-bar {
@@ -1072,7 +1072,7 @@ h5 {
 }
 
 .marker-label {
-  bottom: calc(100% + 1px);
+  line-height: 12px;
 }
 
 .bar-value-label {
@@ -1299,10 +1299,10 @@ input[type="button"] {
   .player-name-input     { font-size: 0.85rem; margin-bottom: 2px; }
 
   .progress-section        { margin: 11px 0 3px; }
-  .progress-bar-container  { height: 46px; }
+  .progress-bar-container  { height: 56px; }
   .progress-bar            { border-radius: 12px; }
   .progress-win-marker     { top: 9px; bottom: auto; height: 30px; }
-  .bar-value-label         { top: 36px; }
+  .bar-value-label         { top: 39px; }
 }
 
 /* Very small phones (< 400px) */
