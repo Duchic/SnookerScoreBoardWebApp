@@ -600,17 +600,28 @@ input[type="button"]:disabled {
 
 .progress-section {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   margin: 14px 0;
   gap: 12px;
 }
 
 .progress-bar-label {
-  width: 24px;
-  text-align: center;
+  width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
   font-weight: bold;
   font-size: 1rem;
   flex-shrink: 0;
+}
+
+#ahead_lbl {
+  overflow-wrap: anywhere;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .progress-bar-container {

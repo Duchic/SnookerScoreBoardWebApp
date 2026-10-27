@@ -471,10 +471,15 @@ function SetFrameStarter(player) {
     RefreshUI();
 }
 
+function GetPlayerName(player) {
+    return document.getElementById(player + "-name").value.trim() ||
+        T(player === "p1" ? "player1" : "player2");
+}
+
 function UpdateFrameStarterUI() {
     var selector = document.getElementById("frame-starter");
     ["p1", "p2"].forEach(function(player, index) {
-        selector.options[index].textContent = document.getElementById(player + "-name").value.trim() || T("player" + (index + 1));
+        selector.options[index].textContent = GetPlayerName(player);
     });
     selector.value = frameStarter;
     selector.disabled = !CanSelectFrameStarter();
@@ -482,9 +487,7 @@ function UpdateFrameStarterUI() {
 }
 
 function PlayerNameChanged() {
-    UpdateFrameStarterUI();
-    UpdateFrameResultUI();
-    PersistMatch();
+    RefreshUI();
 }
 
 function TogglePlayer() {
@@ -559,8 +562,7 @@ function UpdateFrameResultUI() {
     if (!frameOver) return;
 
     var winner = p1point > p2point ? "p1" : p2point > p1point ? "p2" : null;
-    var name = winner ? document.getElementById(winner + "-name").value.trim() ||
-        T(winner === "p1" ? "player1" : "player2") : "";
+    var name = winner ? GetPlayerName(winner) : "";
     SetText("frame-result-title", T("frameFinished"));
     SetText("frame-result-winner", winner ? T("frameWinner").replace("{player}", function() { return name; }) : T("tied"));
     SetText("frame-result-score", T("finalScore").replace("{score}", p1point + " : " + p2point));
@@ -580,7 +582,9 @@ function RefreshUI() {
     document.getElementById("p2break").innerHTML  = T("breakLabel") + ': '  + p2break;
 
     var gap = p1point - p2point;
-    var aheadLbl = gap > 0 ? T("p1Ahead") : gap < 0 ? T("p2Ahead") : T("tied");
+    var aheadLbl = gap === 0 ? T("tied") : T("playerAhead").replace("{player}", function() {
+        return GetPlayerName(gap > 0 ? "p1" : "p2");
+    });
     document.getElementById("ahead_lbl").innerText  = aheadLbl;
     document.getElementById("ahead").innerText      = Math.abs(gap);
 
@@ -709,7 +713,7 @@ function UpdateProgressBars(remaining) {
     var currentColor   = isP1 ? "#1155cc" : "#cc2200";
     var potentialColor = isP1 ? "#99bbf0" : "#f0a090";
 
-    document.getElementById("bar-player-label").innerText             = isP1 ? "P1" : "P2";
+    document.getElementById("bar-player-label").innerText             = GetPlayerName(currentPlayer);
     document.getElementById("bar-current").style.background           = currentColor;
     document.getElementById("bar-potential").style.background         = potentialColor;
     document.getElementById("legend-current-dot").style.background    = currentColor;
